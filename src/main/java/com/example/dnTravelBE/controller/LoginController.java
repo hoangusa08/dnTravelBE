@@ -1,6 +1,8 @@
 package com.example.dnTravelBE.controller;
 
 import com.example.dnTravelBE.dto.LoginRequestDto;
+import com.example.dnTravelBE.dto.RegisterCustomerDto;
+import com.example.dnTravelBE.service.AccountService;
 import com.example.dnTravelBE.util.JwtUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,7 @@ public class LoginController {
 
     private final JwtUtil jwtUtil;
     private final AuthenticationManager authenticationManager;
+    private final AccountService accountService;
 
     @PostMapping("/login")
     public String genereToken(@RequestBody LoginRequestDto loginRequestDto) throws  Exception{
@@ -30,6 +33,8 @@ public class LoginController {
         }
         return jwtUtil.generateToken(loginRequestDto.getEmail());
     }
-//    @PostMapping("/register")
-//    public ResponseEntity<Object> register()
+    @PostMapping("/register/customer")
+    public ResponseEntity<Object> register(@RequestBody RegisterCustomerDto registerCustomerDto){
+        return accountService.createAccountCustomer(registerCustomerDto);
+    }
 }
