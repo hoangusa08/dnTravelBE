@@ -34,6 +34,9 @@ public class Account {
     @NotNull
     private LocalDate createAt;
 
+    @NotNull
+    private boolean isConfirmEmail;
+
     @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;

@@ -1,5 +1,6 @@
 package com.example.dnTravelBE.dto;
 
+import com.example.dnTravelBE.constant.AccountRole;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,10 +10,12 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class customerResponseLoginDto {
+public class CustomerResponseLoginDto {
 
     private String address;
     private String fullname;
     private Integer id;
     private String phoneNumber;
+    private String role;
+
 }
