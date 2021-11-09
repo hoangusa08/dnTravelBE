@@ -1,9 +1,9 @@
 package com.example.dnTravelBE.controller;
 
+import com.example.dnTravelBE.dto.AcceptCodeDto;
 import com.example.dnTravelBE.dto.LoginRequestDto;
 import com.example.dnTravelBE.dto.RegisterCustomerDto;
 import com.example.dnTravelBE.dto.ResponseDto;
-import com.example.dnTravelBE.email.SendMailService;
 import com.example.dnTravelBE.entity.Account;
 import com.example.dnTravelBE.service.AccountService;
 import com.example.dnTravelBE.service.CustomerService;
@@ -22,7 +22,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/authen")
 @AllArgsConstructor
-@CrossOrigin(origins ="*", maxAge = 3600)
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class LoginController {
 
     private final JwtUtil jwtUtil;
@@ -32,12 +32,12 @@ public class LoginController {
     private final EmailService emailService;
 
     @PostMapping("/login")
-    public ResponseEntity<Object> genereToken(@RequestBody LoginRequestDto loginRequestDto) throws  Exception{
+    public ResponseEntity<Object> genereToken(@RequestBody LoginRequestDto loginRequestDto) throws Exception {
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(loginRequestDto.getEmail(), loginRequestDto.getPassword())
             );
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new Exception("Invalid Email or Password");
         }
         Map<String, Object> response = new HashMap<>();
@@ -47,12 +47,24 @@ public class LoginController {
         response.put("user", customerService.getCustomerWhenLogin(loginRequestDto.getEmail()));
         return ResponseEntity.ok(response);
     }
+
     @PostMapping("/register/customer")
     public ResponseEntity<Object> register(@RequestBody RegisterCustomerDto registerCustomerDto) throws MessagingException {
         Account account = accountService.createAccountCustomer(registerCustomerDto);
 
         emailService.sendCodeVerifyMail(account);
         return ResponseEntity.ok(ResponseDto.responseWithoutData());
+    }
+
+    @GetMapping("/resend-email/{accountId}")
+    public ResponseEntity<Object> resendEmail(@PathVariable Integer accountId) throws MessagingException {
+        emailService.resendEmail(accountId);
+        return ResponseEntity.ok(ResponseDto.responseWithoutData());
+    }
+
+    @PostMapping("/accept-code")
+    public ResponseEntity<Object> acceptCode(@RequestBody AcceptCodeDto acceptCodeDto) {
+        return emailService.acceptCode(acceptCodeDto);
     }
 
 }

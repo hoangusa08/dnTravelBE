@@ -12,5 +12,7 @@ import java.util.Optional;
 @Transactional
 public interface AccountRepository extends JpaRepository<Account , Integer> {
 
-    Optional<Account> findByEmail(String email)    ;
+    Optional<Account> findByEmail(String email);
+
+    Optional<Account> findById(Integer id);
 }
