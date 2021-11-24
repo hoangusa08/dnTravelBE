@@ -16,7 +16,7 @@ import javax.validation.constraints.NotNull;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class tour {
+public class Tour {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

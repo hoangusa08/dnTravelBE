@@ -51,8 +51,8 @@ public class SecutityConfig extends WebSecurityConfigurerAdapter {
 //                .and()
 //                .exceptionHandling().and().sessionManagement()
 //                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http.authorizeRequests().antMatchers("/admin/**").hasAnyAuthority("admin", "user");
-        http.authorizeRequests().antMatchers("/one/**").hasAuthority( "user");
+//        http.authorizeRequests().antMatchers("/admin/**").hasAnyAuthority("admin", "user");
+//        http.authorizeRequests().antMatchers("/one/**").hasAuthority( "user");
         http.authorizeRequests().and()
                 .exceptionHandling().and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
