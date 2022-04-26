@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Employee {
+public class Provider {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

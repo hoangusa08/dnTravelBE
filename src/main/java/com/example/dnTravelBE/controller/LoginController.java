@@ -42,7 +42,7 @@ public class LoginController {
         }
         Map<String, Object> response = new HashMap<>();
         response.put("access_token", jwtUtil.generateToken(loginRequestDto.getEmail()));
-        response.put("massage", "login successfully");
+        response.put("message", "login successfully");
         response.put("result", true);
         response.put("user", customerService.getCustomerWhenLogin(loginRequestDto.getEmail()));
         return ResponseEntity.ok(response);
@@ -51,7 +51,6 @@ public class LoginController {
     @PostMapping("/register/customer")
     public ResponseEntity<Object> register(@RequestBody RegisterCustomerDto registerCustomerDto) throws MessagingException {
         Account account = accountService.createAccountCustomer(registerCustomerDto);
-
         emailService.sendCodeVerifyMail(account);
         return ResponseEntity.ok(ResponseDto.responseWithoutData());
     }

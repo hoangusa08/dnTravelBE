@@ -41,17 +41,17 @@ public class EmailServiceImpl implements EmailService {
             confirmationCodeEmail.setCreatedAt(LocalDateTime.now());
             confirmationCodeEmail.setExpireAt(LocalDateTime.now().plusMinutes(timeExpired));
             confirmationCodeEmail.setToken(randomDigit);
-
             String emailContent = String.format(
                     "Hi there," +
                             "\n\nThis is your code: %s." +
                             "\nThis code expire at %d minutes", randomDigit, timeExpired);
+            System.out.println("abc1");
             sendMailService.sendMail(
                     account.getEmail(),
                     "Confirm your email!",
                     emailContent
             );
-            System.out.println("abc");
+
             confirmationCodeMailRepository.save(confirmationCodeEmail);
         } catch (MessagingException | MailAuthenticationException e) {
             throw new MessagingException("Failed to send email");
