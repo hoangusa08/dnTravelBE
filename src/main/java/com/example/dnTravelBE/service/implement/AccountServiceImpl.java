@@ -54,6 +54,11 @@ public class AccountServiceImpl implements AccountService {
         }else {
             throw new FailException("Account is allready existed." , 1000);
         }
+    }
 
+    @Override
+    public AccountRole getRoleOfUser(String email) {
+        Optional<Account> account = accountRepository.findByEmail(email);
+        return account.get().getRole().getName();
     }
 }
