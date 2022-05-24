@@ -1,6 +1,6 @@
 package com.example.dnTravelBE.constant;
 
-public enum Status {
+public enum StatusEnum {
     ACCEPT,
     REFUSE,
     WAIT
