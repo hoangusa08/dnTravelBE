@@ -1,15 +1,13 @@
 package com.example.dnTravelBE.controller;
 
 import com.example.dnTravelBE.constant.AccountRole;
-import com.example.dnTravelBE.dto.AcceptCodeDto;
 import com.example.dnTravelBE.dto.LoginRequestDto;
 import com.example.dnTravelBE.dto.RegisterCustomerDto;
+import com.example.dnTravelBE.dto.RegisterProviderDto;
 import com.example.dnTravelBE.dto.ResponseDto;
 import com.example.dnTravelBE.entity.Account;
-import com.example.dnTravelBE.exception.FailException;
 import com.example.dnTravelBE.service.AccountService;
 import com.example.dnTravelBE.service.CustomerService;
-import com.example.dnTravelBE.service.EmailService;
 import com.example.dnTravelBE.util.JwtUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +29,6 @@ public class LoginController {
     private final AuthenticationManager authenticationManager;
     private final AccountService accountService;
     private final CustomerService customerService;
-    private final EmailService emailService;
 
     @GetMapping("/abc")
     public ResponseEntity<Object> abc () {
@@ -55,7 +52,7 @@ public class LoginController {
         response.put("access_token", jwtUtil.generateToken(loginRequestDto.getEmail()));
         response.put("message", "login successfully");
         response.put("result", true);
-        response.put( "status" , 200);
+        response.put("status" , 200);
         response.put("user", customerService.getCustomerWhenLogin(loginRequestDto.getEmail()));
         return ResponseEntity.ok(response);
     }
@@ -63,26 +60,12 @@ public class LoginController {
     @PostMapping("/register/customer")
     public ResponseEntity<Object> registerCustomer(@RequestBody RegisterCustomerDto registerCustomerDto) throws MessagingException {
         Account account = accountService.createAccountCustomer(registerCustomerDto);
-//        emailService.sendCodeVerifyMail(account);
         return ResponseEntity.ok(ResponseDto.responseWithoutData());
     }
 
     @PostMapping("/register/provider")
-    public ResponseEntity<Object> registerProvider(@RequestBody RegisterCustomerDto registerCustomerDto) throws MessagingException {
-        Account account = accountService.createAccountCustomer(registerCustomerDto);
-//        emailService.sendCodeVerifyMail(account);
+    public ResponseEntity<Object> registerProvider(@RequestBody RegisterProviderDto registerProviderDto) throws MessagingException {
+        Account account = accountService.createAccountProvider(registerProviderDto);
         return ResponseEntity.ok(ResponseDto.responseWithoutData());
     }
-
-    @GetMapping("/resend-email/{accountId}")
-    public ResponseEntity<Object> resendEmail(@PathVariable Integer accountId) throws MessagingException {
-        emailService.resendEmail(accountId);
-        return ResponseEntity.ok(ResponseDto.responseWithoutData());
-    }
-
-    @PostMapping("/accept-code")
-    public ResponseEntity<Object> acceptCode(@RequestBody AcceptCodeDto acceptCodeDto) {
-        return emailService.acceptCode(acceptCodeDto);
-    }
-
 }

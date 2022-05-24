@@ -7,6 +7,10 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -31,8 +35,18 @@ public class Tour {
     @NotNull
     private String description;
 
-    @NotNull
-    private String schedule;
+    @OneToMany(mappedBy = "tour", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    private Set<Schedule> schedules = new HashSet<>();
+
+    @OneToMany(mappedBy = "tour", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    private Set<TourImage> tourImages = new HashSet<>();
+
+    @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER, mappedBy = "tour")
+    private Set<RateTour> rateTours = new HashSet<>();
+
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
 
     @ManyToOne
     @JoinColumn(name = "status_id")
@@ -41,7 +55,5 @@ public class Tour {
     @ManyToOne
     @JoinColumn(name = "provider_id", nullable = false)
     private Provider provider;
-
-
 
 }

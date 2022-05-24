@@ -20,13 +20,19 @@ public class Provider {
     private Integer id ;
 
     @NotNull
-    private String fullName;
+    private String nameCompany;
+
+    @NotNull
+    private String owner;
 
     @NotNull
     private String phoneNumber;
 
     @NotNull
     private String address;
+
+    @NotNull
+    private String bankNumber;
 
     @ManyToOne
     @JoinColumn(name = "status_id")
@@ -35,4 +41,8 @@ public class Provider {
     @OneToOne
     @JoinColumn(name = "account_id")
     private Account account;
+
+    @ManyToOne
+    @JoinColumn(name = "bank_id", nullable = false)
+    private Bank bank;
 }

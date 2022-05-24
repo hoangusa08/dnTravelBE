@@ -3,7 +3,6 @@ package com.example.dnTravelBE.service.implement;
 import com.example.dnTravelBE.constant.AccountRole;
 import com.example.dnTravelBE.dto.RegisterCustomerDto;
 import com.example.dnTravelBE.dto.RegisterProviderDto;
-import com.example.dnTravelBE.dto.ResponseDto;
 import com.example.dnTravelBE.entity.Account;
 import com.example.dnTravelBE.entity.Role;
 import com.example.dnTravelBE.exception.FailException;
@@ -12,10 +11,8 @@ import com.example.dnTravelBE.repository.AccountRepository;
 import com.example.dnTravelBE.repository.RoleRepository;
 import com.example.dnTravelBE.service.AccountService;
 import com.example.dnTravelBE.service.CustomerService;
-import com.example.dnTravelBE.service.EmailService;
 import com.example.dnTravelBE.service.ProviderService;
 import lombok.AllArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,7 +27,7 @@ public class AccountServiceImpl implements AccountService {
     private final AccountRepository accountRepository;
     private final CustomerService customerService;
     private final RoleRepository roleRepository;
-    private  final ProviderService providerService;
+    private final ProviderService providerService;
 
     @Override
     public Account createAccountCustomer(RegisterCustomerDto registerCustomerDto) {
@@ -44,11 +41,9 @@ public class AccountServiceImpl implements AccountService {
             accountCustomer.setPassword(registerCustomerDto.getPassword());
             accountCustomer.setRole(role);
             accountCustomer.setCreateAt(LocalDate.now());
-            accountCustomer.setConfirmEmail(false);
             try {
                 Account newAccountCustomer = accountRepository.save(accountCustomer);
                 customerService.createCustomer(registerCustomerDto , newAccountCustomer);
-//                emailService.sendCodeVerifyMail(newAccountCustomer);
                 return newAccountCustomer;
             } catch (Exception e){
                 throw new FailException("Can't create an account", 1001);
@@ -71,7 +66,6 @@ public class AccountServiceImpl implements AccountService {
             accountCustomer.setPassword(registerProviderDto.getPassword());
             accountCustomer.setRole(role);
             accountCustomer.setCreateAt(LocalDate.now());
-            accountCustomer.setConfirmEmail(true);
             try {
                 Account newAccountCustomer = accountRepository.save(accountCustomer);
                 providerService.createProvider(registerProviderDto , newAccountCustomer);

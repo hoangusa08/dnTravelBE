@@ -17,7 +17,9 @@ public class RegisterProviderDto {
     @Email
     private String email;
     private String password;
-    private String fullName;
+    private String nameCompany;
     private String address;
     private String phoneNumber;
+    private String bankNumber;
+    private Integer bankId;
 }

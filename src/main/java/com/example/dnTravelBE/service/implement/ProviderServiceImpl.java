@@ -27,9 +27,11 @@ public class ProviderServiceImpl implements ProviderService {
         try {
             Provider provider = new Provider();
             provider.setAccount(account);
-            provider.setFullName(registerProviderDto.getFullName());
+            provider.setNameCompany(registerProviderDto.getNameCompany());
             provider.setAddress(registerProviderDto.getAddress());
             provider.setStatus(status);
+            provider.setBankNumber(registerProviderDto.getBankNumber());
+            provider.setPhoneNumber(registerProviderDto.getPhoneNumber());
             providerRepository.save(provider);
         }catch (Exception e) {
             throw new FailException("Cann't create provider", 2002);

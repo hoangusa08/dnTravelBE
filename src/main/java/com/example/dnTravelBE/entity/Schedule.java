@@ -12,28 +12,19 @@ import java.util.Date;
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
-public class RateTour {
+@NoArgsConstructor
+public class Schedule {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
 
-    private int star;
+    @NotNull
+    private Date date;
 
-    @Column(length = 10000)
-    private String comment;
-
-    @NotNull(message = "Ngày tạo không được bỏ trống")
-    private Date create_at;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "cútomer_id")
-    private Customer customer;
-
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "tour_id")
     private Tour tour;
 }
