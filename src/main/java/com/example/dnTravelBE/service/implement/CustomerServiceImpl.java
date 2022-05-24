@@ -17,7 +17,7 @@ import java.util.Map;
 
 @Service
 @AllArgsConstructor
-//@Transactional(rollbackFor = Exception.class)
+@Transactional(rollbackFor = Exception.class)
 public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepository customerRepository;
     private final AccountRepository accountRepository;

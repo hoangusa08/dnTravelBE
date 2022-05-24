@@ -29,6 +29,5 @@ public class SendMailService {
             throw new MailAuthenticationException("Failed to send email!");
         }
         ;
-
     }
 }
