@@ -6,33 +6,19 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class TourDto {
+public class TourDetailDto {
 
     private String name;
-
     private Integer adultPrice;
-
     private Integer childPrice;
-
     private String description;
-
-    private Integer providerId;
-
-    private Integer provinceId;
-
-
-    //    private String status;
-    private Integer categoryTd;
-
-    private ArrayList<Date> schedules;
-
     private ArrayList<String> tourImage;
+    private ArrayList<Date> schedules;
+    private ArrayList<RateDto> rateDtos;
 }

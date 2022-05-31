@@ -48,20 +48,17 @@ public class ProviderServiceImpl implements ProviderService {
     public ProviderResLoginDto getProviderWhenLogin(String email) {
         Account account = accountRepository.findByEmail(email).
                 orElseThrow(() -> new NotFoundException("Not Found Account.", 1023));
-        System.out.println(account.getId()+"");
         Provider provider = providerRepository.findByAccount_Id(account.getId()).
                 orElseThrow(() -> new NotFoundException("Not Found provider.", 1005));
-        System.out.println("abc");
         ProviderResLoginDto providerResLoginDto = new ProviderResLoginDto(
                 provider.getNameCompany(),
                 provider.getOwner(),
                 provider.getId(),
                 provider.getPhoneNumber(),
-                AccountRole.ROLE_PROVIDER.toString(),
+                provider.getAccount().getRole().getName().name(),
                 provider.getAddress(),
                 provider.getBankNumber()
         );
-        System.out.println("abc12");
         return providerResLoginDto;
     }
 }

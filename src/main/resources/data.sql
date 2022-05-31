@@ -2,16 +2,16 @@ INSERT INTO role (name) VALUES ('ROLE_CUSTOMER');
 INSERT INTO role (name) VALUES ('ROLE_PROVIDER');
 INSERT INTO role (name) VALUES ('ROLE_ADMIN');
 
-INSERT INTO Status (name) VALUES ('ACCEPT');
-INSERT INTO Status (name) VALUES ('REFUSE');
-INSERT INTO Status (name) VALUES ('WAITING');
-
 INSERT INTO banks (name) VALUES ('Vietcombank');
-INSERT INTO banks (name) VALUES ('Donng A');
+INSERT INTO banks (name) VALUES ('DongA Bank');
 
 INSERT INTO status(name) VALUES ('WAITING');
 INSERT INTO status(name) VALUES ('ACCEPT');
 INSERT INTO status(name) VALUES ('REFUSE');
+
+INSERT INTO province(name) VALUES  ('Đà Nẵng');
+
+INSERT INTO categories(name) VALUES ('Mạo Hiểm');
 
 INSERT INTO account (email, password, username ,role_id, create_at) VALUES ('hoangusa08@gmail.com', '123', 'hoang', 3 , '2022-05-05');
 INSERT INTO account (email, password, username ,role_id, create_at) VALUES ('hoangusa081@gmail.com', '123', 'hoang1', 2 , '2022-05-05');

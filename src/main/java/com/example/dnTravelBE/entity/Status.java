@@ -1,6 +1,7 @@
 package com.example.dnTravelBE.entity;
 
 import com.example.dnTravelBE.constant.AccountRole;
+import com.example.dnTravelBE.constant.StatusEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,6 +24,6 @@ public class Status {
     @NotNull
     @Column(unique = true)
     @Enumerated(EnumType.STRING)
-    private AccountRole name;
+    private StatusEnum name;
 
 }

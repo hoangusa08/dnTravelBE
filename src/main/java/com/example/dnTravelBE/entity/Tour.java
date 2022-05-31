@@ -49,6 +49,10 @@ public class Tour {
     private Category category;
 
     @ManyToOne
+    @JoinColumn(name = "start_location", nullable = false)
+    private Province province;
+
+    @ManyToOne
     @JoinColumn(name = "status_id")
     private Status status;
 

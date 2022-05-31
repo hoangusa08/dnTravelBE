@@ -1,5 +1,8 @@
 package com.example.dnTravelBE.controller;
 
+import com.example.dnTravelBE.dto.ResponseDto;
+import com.example.dnTravelBE.dto.TourDto;
+import com.example.dnTravelBE.service.TourService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,14 +13,16 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class ProviderController {
 
+    private final TourService tourService;
     @GetMapping("tours")
     private ResponseEntity<Object> getTours() {
         return null;
     }
 
     @PostMapping("createTour")
-    private ResponseEntity<Object> createTour() {
-        return null;
+    private ResponseEntity<Object> createTour(@RequestBody TourDto tourDto) {
+        boolean status = tourService.createTour(tourDto);
+        return ResponseEntity.ok(ResponseDto.responseWithoutData());
     }
 
     @PostMapping("editTour")

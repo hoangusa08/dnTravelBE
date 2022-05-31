@@ -8,6 +8,7 @@ import com.example.dnTravelBE.dto.ResponseDto;
 import com.example.dnTravelBE.entity.Account;
 import com.example.dnTravelBE.exception.FailException;
 import com.example.dnTravelBE.service.AccountService;
+import com.example.dnTravelBE.service.AdminService;
 import com.example.dnTravelBE.service.CustomerService;
 import com.example.dnTravelBE.service.ProviderService;
 import com.example.dnTravelBE.util.JwtUtil;
@@ -33,6 +34,7 @@ public class LoginController {
     private final CustomerService customerService;
     private final ProviderService providerService;
 
+    private final AdminService adminService;
 
     @GetMapping("/abc")
     public ResponseEntity<Object> abc() {
@@ -84,7 +86,7 @@ public class LoginController {
             response.put("user", providerService.getProviderWhenLogin(loginRequestDto.getEmail()));
         }
         else {
-            response.put("user", customerService.getCustomerWhenLogin(loginRequestDto.getEmail()));
+            response.put("user", adminService.getInfoWhenLogin(loginRequestDto.getEmail()));
         }
 
         return ResponseEntity.ok(response);
