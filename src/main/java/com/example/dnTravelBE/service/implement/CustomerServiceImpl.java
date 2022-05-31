@@ -21,6 +21,7 @@ import java.util.Map;
 public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepository customerRepository;
     private final AccountRepository accountRepository;
+
     @Override
     public void createCustomer(RegisterCustomerDto registerCustomerDto, Account newAccountCustomer) {
         try {
@@ -30,7 +31,7 @@ public class CustomerServiceImpl implements CustomerService {
             customer.setAddress(registerCustomerDto.getAddress());
             customer.setPhoneNumber(registerCustomerDto.getPhoneNumber());
             customerRepository.save(customer);
-        }catch (Exception e) {
+        } catch (Exception e) {
             throw new FailException("Cann't create customer", 2002);
         }
     }
@@ -38,9 +39,9 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CustomerResponseLoginDto getCustomerWhenLogin(String email) {
         Account account = accountRepository.findByEmail(email)
-                .orElseThrow(() -> new  NotFoundException("Not Found Account.", 1005));
+                .orElseThrow(() -> new NotFoundException("Not Found Account.", 1005));
         Customer customer = customerRepository.findByAccount_Id(account.getId())
-                .orElseThrow(() -> new  NotFoundException("Not Found Cutomer.", 1006));
+                .orElseThrow(() -> new NotFoundException("Not Found Cutomer.", 1006));
         CustomerResponseLoginDto customerResponseLoginDto = new CustomerResponseLoginDto(
                 customer.getAddress(),
                 customer.getPhoneNumber(),

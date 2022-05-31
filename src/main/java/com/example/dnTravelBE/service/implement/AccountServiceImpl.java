@@ -33,8 +33,8 @@ public class AccountServiceImpl implements AccountService {
     public Account createAccountCustomer(RegisterCustomerDto registerCustomerDto) {
         Optional<Account> account = accountRepository.findByEmail(registerCustomerDto.getEmail());
         Role role = roleRepository.findByName(AccountRole.ROLE_CUSTOMER)
-                .orElseThrow(() -> new NotFoundException("Role input invalid" , 1004));
-        if (account.isEmpty()){
+                .orElseThrow(() -> new NotFoundException("Role input invalid", 1004));
+        if (account.isEmpty()) {
             Account accountCustomer = new Account();
             accountCustomer.setUsername(registerCustomerDto.getUsername());
             accountCustomer.setEmail(registerCustomerDto.getEmail());
@@ -43,14 +43,14 @@ public class AccountServiceImpl implements AccountService {
             accountCustomer.setCreateAt(LocalDate.now());
             try {
                 Account newAccountCustomer = accountRepository.save(accountCustomer);
-                customerService.createCustomer(registerCustomerDto , newAccountCustomer);
+                customerService.createCustomer(registerCustomerDto, newAccountCustomer);
                 return newAccountCustomer;
-            } catch (Exception e){
+            } catch (Exception e) {
                 throw new FailException("Can't create an account", 1001);
             }
 
-        }else {
-            throw new FailException("Account is allready existed." , 1000);
+        } else {
+            throw new FailException("Account is allready existed.", 1000);
         }
     }
 
@@ -58,8 +58,8 @@ public class AccountServiceImpl implements AccountService {
     public Account createAccountProvider(RegisterProviderDto registerProviderDto) {
         Optional<Account> account = accountRepository.findByEmail(registerProviderDto.getEmail());
         Role role = roleRepository.findByName(AccountRole.ROLE_PROVIDER)
-                .orElseThrow(() -> new NotFoundException("Role input invalid" , 1004));
-        if (account.isEmpty()){
+                .orElseThrow(() -> new NotFoundException("Role input invalid", 1004));
+        if (account.isEmpty()) {
             Account accountCustomer = new Account();
             accountCustomer.setUsername(registerProviderDto.getUsername());
             accountCustomer.setEmail(registerProviderDto.getEmail());
@@ -68,19 +68,20 @@ public class AccountServiceImpl implements AccountService {
             accountCustomer.setCreateAt(LocalDate.now());
             try {
                 Account newAccountCustomer = accountRepository.save(accountCustomer);
-                providerService.createProvider(registerProviderDto , newAccountCustomer);
+                providerService.createProvider(registerProviderDto, newAccountCustomer);
                 return newAccountCustomer;
-            } catch (Exception e){
+            } catch (Exception e) {
                 throw new FailException("Can't create an account", 1008);
             }
 
-        }else {
-            throw new FailException("Account is allready existed." , 1000);
+        } else {
+            throw new FailException("Account is allready existed.", 1000);
         }
     }
 
     @Override
     public AccountRole getRoleOfUser(String email) {
+        System.out.println(email);
         Optional<Account> account = accountRepository.findByEmail(email);
         return account.get().getRole().getName();
     }
