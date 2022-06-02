@@ -7,8 +7,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -34,6 +32,9 @@ public class Tour {
 
     @NotNull
     private String description;
+
+    @NotNull
+    private boolean isDelete;
 
     @OneToMany(mappedBy = "tour", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private Set<Schedule> schedules = new HashSet<>();

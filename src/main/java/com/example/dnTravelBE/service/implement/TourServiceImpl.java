@@ -7,7 +7,9 @@ import com.example.dnTravelBE.dto.TourResDto;
 import com.example.dnTravelBE.entity.*;
 import com.example.dnTravelBE.exception.FailException;
 import com.example.dnTravelBE.exception.NotFoundException;
+import com.example.dnTravelBE.mapper.TourMapper;
 import com.example.dnTravelBE.repository.*;
+import com.example.dnTravelBE.request.RateTourReq;
 import com.example.dnTravelBE.service.TourService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -30,6 +32,8 @@ public class TourServiceImpl implements TourService {
     private final CategoryRepo categoryRepo;
     private final TourImageRepo tourImageRepo;
     private final ScheduleRepo scheduleRepo;
+    private final RateTourRepo  rateTourRepo;
+    private final CustomerRepository customerRepository;
 
     public int totalTourPages(StatusEnum statusEnum) {
         int count = tourRepo.countAllByStatus(statusEnum);
@@ -64,6 +68,7 @@ public class TourServiceImpl implements TourService {
             tour.setStatus(status);
             tour.setCategory(category);
             tour.setProvider(provider);
+            tour.setDelete(false);
             Tour newTour = tourRepo.save(tour);
             for (int i = 0; i< tourDto.getTourImage().size(); i++){
                 TourImage tourImage = new TourImage();
@@ -99,9 +104,40 @@ public class TourServiceImpl implements TourService {
     public TourDetailDto getTourDetailById(Integer id) {
         Tour tour = tourRepo.findById(id).
                 orElseThrow(() -> new NotFoundException("Not Found Tour.", 1014));
-//        TourImage tourImage =
-//        ArrayList<TourDetailDto> tourDetailDtos = new ArrayList<>();
 
-        return null;
+        return TourMapper.toTourDetailDto(tour);
+    }
+
+    @Override
+    public void createRateTour(RateTourReq rateTourReq) {
+        Customer customer = customerRepository.findById(rateTourReq.getCustomerId()).
+                orElseThrow(() -> new NotFoundException("Not Found Customer.", 1015));
+        Tour tour = tourRepo.findById(rateTourReq.getTourId()).
+                orElseThrow(() -> new NotFoundException("Not Found Tour.", 1016));
+        RateTour rateTour = new RateTour();
+        rateTour.setTour(tour);
+        rateTour.setCreate_at(rateTourReq.getCreateAt());
+        rateTour.setComment(rateTourReq.getComment());
+        rateTour.setStar(rateTourReq.getStar());
+        rateTour.setCustomer(customer);
+        try {
+            rateTourRepo.save(rateTour);
+        }catch (Exception e) {
+            throw new FailException("Can't create an rate tour", 1020);
+        }
+    }
+
+    @Override
+    public void editTour() {
+
+    }
+
+    @Override
+    public void changeStatusTour(Integer tourId, StatusEnum statusEnum) {
+        Tour tour = tourRepo.findById(tourId).
+                orElseThrow(() -> new NotFoundException("Not Found Tour.", 1024));
+        Status status = statusRepository.findByName(statusEnum).
+                orElseThrow(() -> new NotFoundException("Not Found status.", 1025));
+        tour.setStatus(status);
     }
 }

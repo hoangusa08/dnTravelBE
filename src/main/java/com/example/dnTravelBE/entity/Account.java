@@ -38,4 +38,12 @@ public class Account {
     @JoinColumn(name = "role_id")
     private Role role;
 
+    @OneToOne(cascade = CascadeType.PERSIST,  mappedBy = "account")
+    private Customer customer;
+
+    @OneToOne(cascade = CascadeType.PERSIST,  mappedBy = "account")
+    private Provider provider;
+
+    @OneToOne(cascade = CascadeType.PERSIST,  mappedBy = "account")
+    private Admin admin;
 }

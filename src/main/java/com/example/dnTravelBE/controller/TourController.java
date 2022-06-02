@@ -1,5 +1,7 @@
 package com.example.dnTravelBE.controller;
 
+import com.example.dnTravelBE.dto.ResponseDto;
+import com.example.dnTravelBE.service.TourService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +14,7 @@ import javax.validation.constraints.Min;
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class TourController {
 
+    private final TourService tourService;
     @GetMapping()
     public ResponseEntity<Object> getAllTourAccept(@RequestParam(defaultValue = "0") @Min(0) Integer page,
                                                    @RequestParam(defaultValue = " ") String keyword) {
@@ -20,7 +23,7 @@ public class TourController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Object> getTourDeTail(@PathVariable int id)throws Exception {
-        return null;
+        return ResponseEntity.ok(ResponseDto.response(tourService.getTourDetailById(id)));
     }
 
     @GetMapping("/new-tours")

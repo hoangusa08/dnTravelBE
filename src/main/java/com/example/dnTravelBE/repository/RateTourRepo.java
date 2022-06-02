@@ -1,15 +1,15 @@
 package com.example.dnTravelBE.repository;
 
-import com.example.dnTravelBE.entity.TourImage;
+import com.example.dnTravelBE.entity.RateTour;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
+import java.util.ArrayList;
 
-@Repository
 @Transactional
-public interface TourImageRepo extends JpaRepository<TourImage, Integer> {
-
+@Repository
+public interface RateTourRepo extends JpaRepository<RateTour, Integer> {
+    ArrayList<RateTour> findAllByTourId(Integer tourId);
 
 }

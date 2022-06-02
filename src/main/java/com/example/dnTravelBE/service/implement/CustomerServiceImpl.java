@@ -52,5 +52,20 @@ public class CustomerServiceImpl implements CustomerService {
         return customerResponseLoginDto;
     }
 
+    @Override
+    public CustomerResponseLoginDto getCustomerDetail(Integer id) {
+        Customer customer = customerRepository.findById(id).
+                orElseThrow(() -> new NotFoundException("Not Found Customer.", 1009));
+        Account account = accountRepository.findByCustomerId(customer.getId()).
+                orElseThrow(() -> new NotFoundException("Not Found Account.", 1111));
+
+        CustomerResponseLoginDto customerResponseLoginDto = new CustomerResponseLoginDto();
+
+        customerResponseLoginDto.setId(account.getId());
+        customerResponseLoginDto.setRole(account.getRole().getName().toString());
+//        customerResponseLoginDto
+        System.out.println(account.getUsername());
+    }
+
 
 }

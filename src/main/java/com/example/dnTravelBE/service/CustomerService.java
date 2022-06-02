@@ -8,4 +8,6 @@ public interface CustomerService {
     void createCustomer(RegisterCustomerDto registerCustomerDto, Account newAccountCustomer);
 
     CustomerResponseLoginDto getCustomerWhenLogin(String email);
+
+    CustomerResponseLoginDto getCustomerDetail (Integer id);
 }
