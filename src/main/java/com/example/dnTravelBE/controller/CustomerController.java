@@ -1,6 +1,9 @@
 package com.example.dnTravelBE.controller;
 
 import com.example.dnTravelBE.constant.StatusEnum;
+import com.example.dnTravelBE.dto.ResponseDto;
+import com.example.dnTravelBE.request.RateTourReq;
+import com.example.dnTravelBE.service.TourService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class CustomerController {
+
+    private final TourService tourService;
 
     @GetMapping("/{id}")
     public ResponseEntity<Object> getCustomerDetail(@PathVariable int id) {
@@ -42,8 +47,9 @@ public class CustomerController {
     }
 
     @PostMapping("rate-tour")
-    public ResponseEntity<Object> rateTour () {
-        return null;
+    public ResponseEntity<Object> rateTour (@RequestBody RateTourReq rateTourReq) {
+        tourService.createRateTour(rateTourReq);
+        return ResponseEntity.ok(ResponseDto.responseWithoutData());
     }
 
     @PutMapping("rate-tour")

@@ -61,4 +61,18 @@ public class ProviderServiceImpl implements ProviderService {
         );
         return providerResLoginDto;
     }
+
+    @Override
+    public void changeStatusProvider(Integer id, StatusEnum statusEnum) {
+        Provider provider = providerRepository.findById(id).
+                orElseThrow(() -> new NotFoundException("Not Found provider.", 1055));
+        Status status = statusRepository.findByName(statusEnum).
+                orElseThrow(() -> new NotFoundException("Not Found status.", 1056));
+        provider.setStatus(status);
+        try {
+            providerRepository.save(provider);
+        } catch (Exception e) {
+            throw new FailException("Cann't update status provider", 2003);
+        }
+    }
 }

@@ -35,6 +35,9 @@ public class Tour {
     @NotNull
     private String description;
 
+    @NotNull
+    private boolean isDelete;
+
     @OneToMany(mappedBy = "tour", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private Set<Schedule> schedules = new HashSet<>();
 
