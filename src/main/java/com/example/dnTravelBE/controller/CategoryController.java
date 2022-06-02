@@ -23,7 +23,7 @@ public class CategoryController {
 
     @GetMapping
     public ResponseEntity<Object> getCategories() {
-        List<Category> categories = categoryService.getCategories();
+        List<Object> categories = categoryService.getCategories();
         Map<String, Object> response = ResponseDto.response(categories);
         return ResponseEntity.ok(response);
     }
