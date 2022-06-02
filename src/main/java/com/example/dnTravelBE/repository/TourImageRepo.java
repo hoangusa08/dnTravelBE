@@ -8,5 +8,5 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 @Transactional
 public interface TourImageRepo extends JpaRepository<TourImage, Integer> {
-    
+
 }
