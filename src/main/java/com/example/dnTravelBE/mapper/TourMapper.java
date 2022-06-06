@@ -2,11 +2,13 @@ package com.example.dnTravelBE.mapper;
 
 import com.example.dnTravelBE.dto.RateDto;
 import com.example.dnTravelBE.dto.TourDetailDto;
+import com.example.dnTravelBE.dto.TourListDto;
 import com.example.dnTravelBE.entity.RateTour;
 import com.example.dnTravelBE.entity.Schedule;
 import com.example.dnTravelBE.entity.Tour;
 import com.example.dnTravelBE.entity.TourImage;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -25,7 +27,7 @@ public class TourMapper {
             tourImgs.add(tourImage.getLink());
         }
         tourDetailDto.setTourImage(tourImgs);
-        List<Date> schedules = new ArrayList<>();
+        List<LocalDate> schedules = new ArrayList<>();
         for(Schedule schedule : tour.getSchedules()){
             schedules.add(schedule.getDate());
         }
@@ -42,5 +44,20 @@ public class TourMapper {
         }
         tourDetailDto.setRateTours(rateDtos);
         return tourDetailDto;
+    }
+
+    public  static TourListDto  mapToTourListDto (Tour tour, Integer star){
+        TourListDto tourListDto = new TourListDto();
+        tourListDto.setId(tour.getId());
+        tourListDto.setName(tour.getName());
+        tourListDto.setAdultPrice(tour.getAdultPrice());
+        tourListDto.setChildPrice(tour.getChildPrice());
+        tourListDto.setDescription(tour.getDescription());
+        tourListDto.setCategory(tour.getCategory().getName());
+        tourListDto.setProvider(tour.getProvider().getNameCompany());
+        tourListDto.setProvince(tour.getProvince().getName());
+        tourListDto.setTourImage(tour.getTourImages().iterator().next().getLink());
+        tourListDto.setStar(star);
+        return tourListDto;
     }
 }

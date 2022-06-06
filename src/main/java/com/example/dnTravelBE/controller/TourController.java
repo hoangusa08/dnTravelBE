@@ -1,5 +1,6 @@
 package com.example.dnTravelBE.controller;
 
+import com.example.dnTravelBE.constant.StatusEnum;
 import com.example.dnTravelBE.dto.ResponseDto;
 import com.example.dnTravelBE.service.TourService;
 import lombok.AllArgsConstructor;
@@ -18,7 +19,7 @@ public class TourController {
     @GetMapping()
     public ResponseEntity<Object> getAllTourAccept(@RequestParam(defaultValue = "0") @Min(0) Integer page,
                                                    @RequestParam(defaultValue = " ") String keyword) {
-        return null;
+        return ResponseEntity.ok(ResponseDto.response(tourService.getAllTour(StatusEnum.WAITING, page, keyword)));
     }
 
     @GetMapping("/{id}")

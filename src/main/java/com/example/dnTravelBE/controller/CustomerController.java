@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/customer")
 @AllArgsConstructor
-@CrossOrigin(origins = "*", maxAge = 3600)
+//@CrossOrigin(origins = "*", maxAge = 3600)
 public class CustomerController {
 
     private final TourService tourService;
@@ -62,6 +62,11 @@ public class CustomerController {
 
     @GetMapping("rate-tour")
     public ResponseEntity<Object> getRateTour() {
+        return null;
+    }
+
+    @PostMapping("/payment")
+    public ResponseEntity<Object> payment() {
         return null;
     }
 

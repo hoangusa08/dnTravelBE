@@ -63,8 +63,7 @@ public class CustomerServiceImpl implements CustomerService {
 
         customerResponseLoginDto.setId(account.getId());
         customerResponseLoginDto.setRole(account.getRole().getName().toString());
-//        customerResponseLoginDto
-        System.out.println(account.getUsername());
+        return customerResponseLoginDto;
     }
 
 

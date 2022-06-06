@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Date;
 
@@ -20,6 +21,6 @@ public class TourDetailDto {
     private Integer childPrice;
     private String description;
     private List<String> tourImage;
-    private List<Date> schedules;
+    private List<LocalDate> schedules;
     private List<RateDto> rateTours;
 }

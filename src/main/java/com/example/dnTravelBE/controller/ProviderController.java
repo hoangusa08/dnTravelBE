@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/Provider")
+@RequestMapping("/provider")
 @AllArgsConstructor
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class ProviderController {
@@ -21,6 +21,7 @@ public class ProviderController {
 
     @PostMapping("createTour")
     private ResponseEntity<Object> createTour(@RequestBody TourDto tourDto) {
+        System.out.println("abc");
         boolean status = tourService.createTour(tourDto);
         return ResponseEntity.ok(ResponseDto.responseWithoutData());
     }

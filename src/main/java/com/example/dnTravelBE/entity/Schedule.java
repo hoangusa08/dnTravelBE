@@ -1,5 +1,6 @@
 package com.example.dnTravelBE.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,6 +8,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -22,7 +24,8 @@ public class Schedule {
     private int id;
 
     @NotNull
-    private Date date;
+    @JsonFormat(locale="dd-MM-yyyy")
+    private LocalDate date;
 
     @ManyToOne
     @JoinColumn(name = "tour_id")

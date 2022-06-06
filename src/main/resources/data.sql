@@ -10,8 +10,12 @@ INSERT INTO status(name) VALUES ('ACCEPT');
 INSERT INTO status(name) VALUES ('REFUSE');
 
 INSERT INTO province(name) VALUES  ('Đà Nẵng');
+INSERT INTO province(name) VALUES  ('Hà Nội');
+INSERT INTO province(name) VALUES  ('HCM');
 
 INSERT INTO categories(name) VALUES ('Mạo Hiểm');
+INSERT INTO categories(name) VALUES ('Ngắm Cảnh');
+INSERT INTO categories(name) VALUES ('Khám Pha');
 
 INSERT INTO account (email, password, username ,role_id, create_at) VALUES ('hoangusa08@gmail.com', '123', 'hoang', 3 , '2022-05-05');
 INSERT INTO account (email, password, username ,role_id, create_at) VALUES ('hoangusa081@gmail.com', '123', 'hoang1', 2 , '2022-05-05');

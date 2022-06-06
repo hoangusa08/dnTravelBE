@@ -1,6 +1,7 @@
 package com.example.dnTravelBE.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.models.auth.In;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,15 +9,15 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class TourDto {
+
+public class TourListDto {
+
+    private Integer id;
 
     private String name;
 
@@ -26,15 +27,13 @@ public class TourDto {
 
     private String description;
 
-    private Integer providerId;
+    private String provider;
 
-    private Integer provinceId;
+    private String province;
 
-    //    private String status;
-    private Integer categoryTd;
+    private String category;
 
-    @JsonFormat(pattern = "dd-MM-yyyy")
-    private ArrayList<LocalDate> schedules;
+    private String tourImage;
 
-    private ArrayList<String> tourImage;
+    private Integer star;
 }

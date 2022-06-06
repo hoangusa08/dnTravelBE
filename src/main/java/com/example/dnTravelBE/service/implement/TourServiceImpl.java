@@ -1,9 +1,7 @@
 package com.example.dnTravelBE.service.implement;
 
 import com.example.dnTravelBE.constant.StatusEnum;
-import com.example.dnTravelBE.dto.TourDetailDto;
-import com.example.dnTravelBE.dto.TourDto;
-import com.example.dnTravelBE.dto.TourResDto;
+import com.example.dnTravelBE.dto.*;
 import com.example.dnTravelBE.entity.*;
 import com.example.dnTravelBE.exception.FailException;
 import com.example.dnTravelBE.exception.NotFoundException;
@@ -12,13 +10,15 @@ import com.example.dnTravelBE.repository.*;
 import com.example.dnTravelBE.request.RateTourReq;
 import com.example.dnTravelBE.service.TourService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.awt.print.Pageable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -35,16 +35,20 @@ public class TourServiceImpl implements TourService {
     private final RateTourRepo  rateTourRepo;
     private final CustomerRepository customerRepository;
 
+    private static int sizePage = 5;
+
     public int totalTourPages(StatusEnum statusEnum) {
-        int count = tourRepo.countAllByStatus(statusEnum);
-        if(count <= 10) {
+        Status status = statusRepository.findByName(statusEnum).
+                orElseThrow(() -> new NotFoundException("Not Found status.", 1112));
+        int count = tourRepo.countAllByStatus(status);
+        if(count <= sizePage) {
             return 1;
         }
-        else if (count % 10 != 0) {
-            return (int) Math.floor(count / 10) + 1;
+        else if (count % sizePage != 0) {
+            return (int) Math.floor(count / sizePage) + 1;
         }
         else  {
-            return (int) Math.floor(count / 10);
+            return (int) Math.floor(count / sizePage);
         }
     }
 
@@ -53,7 +57,7 @@ public class TourServiceImpl implements TourService {
         Provider provider = providerRepository.findById(tourDto.getProviderId()).
                 orElseThrow(() -> new NotFoundException("Not Found provider.", 1005));
         Province province = provinceRepo.findById(tourDto.getProvinceId()).
-                orElseThrow(() -> new NotFoundException("Not Found provider.", 1006));
+                orElseThrow(() -> new NotFoundException("Not Found province.", 1006));
         Category category = categoryRepo.findById(tourDto.getCategoryTd()).
                 orElseThrow(() -> new NotFoundException("Not Found category.", 1007));
         Status status = statusRepository.findByName(StatusEnum.WAITING).
@@ -82,6 +86,7 @@ public class TourServiceImpl implements TourService {
                 tourImageRepo.save(tourImage);
             }
             for (int i = 0; i< tourDto.getSchedules().size(); i++){
+                System.out.println(tourDto.getSchedules().get(i));
                  Schedule schedule = new Schedule();
                  schedule.setTour(newTour);
                  schedule.setDate(tourDto.getSchedules().get(i));
@@ -94,17 +99,28 @@ public class TourServiceImpl implements TourService {
     }
 
     @Override
-    public List<TourResDto> getAllTour(Integer page, String keyword) {
-        Pageable pageable = (Pageable) PageRequest.of(page, 10);
-        List<TourResDto> tourResDtos = new ArrayList<>();
-        return null;
+    public ResponseTourListDto getAllTour(StatusEnum statusEnum ,Integer page, String keyword) {
+        Pageable pageable = PageRequest.of(page, sizePage);
+        Status status = statusRepository.findByName(statusEnum).
+                orElseThrow(() -> new NotFoundException("Not Found status.", 1111));
+        List<Tour> tours = tourRepo.findAllByStatusId(status.getId(), pageable);
+        Integer total = (Integer) totalTourPages(statusEnum);
+        ResponseTourListDto responseTourListDto = new ResponseTourListDto();
+        List<TourListDto> tourListDtos = new ArrayList<>();
+        for (Tour tour : tours){
+            TourListDto tourListDto = TourMapper.mapToTourListDto(tour, 5);
+            tourListDtos.add(tourListDto);
+        }
+        responseTourListDto.setTours(tourListDtos);
+        responseTourListDto.setTotal(total);
+        responseTourListDto.setPage(page);
+        return responseTourListDto;
     }
 
     @Override
     public TourDetailDto getTourDetailById(Integer id) {
         Tour tour = tourRepo.findById(id).
                 orElseThrow(() -> new NotFoundException("Not Found Tour.", 1014));
-
         return TourMapper.toTourDetailDto(tour);
     }
 
