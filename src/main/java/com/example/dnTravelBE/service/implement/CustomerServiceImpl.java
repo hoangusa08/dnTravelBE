@@ -44,25 +44,31 @@ public class CustomerServiceImpl implements CustomerService {
                 .orElseThrow(() -> new NotFoundException("Not Found Cutomer.", 1006));
         CustomerResponseLoginDto customerResponseLoginDto = new CustomerResponseLoginDto(
                 customer.getAddress(),
-                customer.getPhoneNumber(),
-                customer.getId(),
                 customer.getFullName(),
-                account.getRole().getName().toString()
+                customer.getId(),
+                customer.getPhoneNumber(),
+                account.getRole().getName().toString(),
+                account.getUsername(),
+                account.getEmail()
         );
         return customerResponseLoginDto;
     }
 
     @Override
     public CustomerResponseLoginDto getCustomerDetail(Integer id) {
-        Customer customer = customerRepository.findById(id).
-                orElseThrow(() -> new NotFoundException("Not Found Customer.", 1009));
-        Account account = accountRepository.findByCustomerId(customer.getId()).
-                orElseThrow(() -> new NotFoundException("Not Found Account.", 1111));
-
-        CustomerResponseLoginDto customerResponseLoginDto = new CustomerResponseLoginDto();
-
-        customerResponseLoginDto.setId(account.getId());
-        customerResponseLoginDto.setRole(account.getRole().getName().toString());
+        Customer customer = customerRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Not Found Cutomer.", 1021));
+        Account account = accountRepository.findByCustomerId(customer.getId())
+                .orElseThrow(() -> new NotFoundException("Not Found Account.", 1205));
+        CustomerResponseLoginDto customerResponseLoginDto = new CustomerResponseLoginDto(
+                customer.getAddress(),
+                customer.getFullName(),
+                customer.getId(),
+                customer.getPhoneNumber(),
+                account.getRole().getName().toString(),
+                account.getUsername(),
+                account.getEmail()
+        );
         return customerResponseLoginDto;
     }
 

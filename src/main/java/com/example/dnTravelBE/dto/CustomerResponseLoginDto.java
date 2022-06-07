@@ -13,9 +13,11 @@ import lombok.Setter;
 public class CustomerResponseLoginDto {
 
     private String address;
-    private String fullname;
+    private String fullName;
     private Integer id;
     private String phoneNumber;
     private String role;
+    private String username;
+    private String email;
 
 }
