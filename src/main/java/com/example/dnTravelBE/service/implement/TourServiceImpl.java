@@ -68,6 +68,7 @@ public class TourServiceImpl implements TourService {
             tour.setAdultPrice(tourDto.getAdultPrice());
             tour.setChildPrice(tourDto.getChildPrice());
             tour.setDescription(tourDto.getDescription());
+            tour.setSubDescription(tourDto.getSubDescription());
             tour.setProvince(province);
             tour.setStatus(status);
             tour.setCategory(category);

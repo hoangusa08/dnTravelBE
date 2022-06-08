@@ -31,6 +31,8 @@ public class Account {
     @NotNull
     private String password;
 
+    private String avatar;
+
     @NotNull
     private LocalDate createAt;
 

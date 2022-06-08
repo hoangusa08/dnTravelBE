@@ -30,7 +30,8 @@ public class TourDto {
 
     private Integer provinceId;
 
-    //    private String status;
+    private String subDescription;
+
     private Integer categoryTd;
 
     @JsonFormat(pattern = "dd-MM-yyyy")
