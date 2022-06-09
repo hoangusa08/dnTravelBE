@@ -18,7 +18,7 @@ public class TourController {
     private final TourService tourService;
     @GetMapping()
     public ResponseEntity<Object> getAllTourAccept(@RequestParam(defaultValue = "0") @Min(0) Integer page,
-                                                   @RequestParam(defaultValue = " ") String keyword) {
+                                                   @RequestParam(defaultValue = "") String keyword) {
         return ResponseEntity.ok(ResponseDto.response(tourService.getAllTour(StatusEnum.WAITING, page, keyword)));
     }
 

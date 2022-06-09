@@ -14,7 +14,9 @@ public interface TourService {
 
     boolean createTour(TourDto tourDto);
 
-    ResponseTourListDto getAllTour(StatusEnum statusEnum, Integer page, String keywork);
+    ResponseTourListDto getAllTour(StatusEnum statusEnum, Integer page, String keyword);
+
+    ResponseTourListDto getAllTourProvider(Integer providerId, StatusEnum statusEnum, Integer page, String keyword);
 
     TourDetailDto getTourDetailById(Integer id);
 
@@ -23,5 +25,7 @@ public interface TourService {
     void editTour();
 
     void changeStatusTour(Integer tourId, StatusEnum statusEnum);
+
+    void setStatusTour(Integer id, boolean status);
 
 }

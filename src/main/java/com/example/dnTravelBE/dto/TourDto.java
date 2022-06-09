@@ -34,6 +34,8 @@ public class TourDto {
 
     private Integer categoryTd;
 
+    private Integer numberDate;
+
     @JsonFormat(pattern = "dd-MM-yyyy")
     private ArrayList<LocalDate> schedules;
 

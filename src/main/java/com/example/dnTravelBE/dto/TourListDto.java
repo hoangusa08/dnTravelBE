@@ -27,6 +27,8 @@ public class TourListDto {
 
     private String description;
 
+    private String subDescription;
+
     private String provider;
 
     private String province;
@@ -36,4 +38,6 @@ public class TourListDto {
     private String tourImage;
 
     private Integer star;
+
+    private boolean isDetele;
 }

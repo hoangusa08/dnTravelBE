@@ -1,24 +1,29 @@
 package com.example.dnTravelBE.repository;
 
-import com.example.dnTravelBE.constant.StatusEnum;
 import com.example.dnTravelBE.entity.Status;
 import com.example.dnTravelBE.entity.Tour;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-
 @Transactional
-public interface TourRepo extends PagingAndSortingRepository<Tour, Integer> {
+@Repository
+public interface TourRepo extends JpaRepository<Tour, Integer> {
 
     int countAllByStatus(Status status);
 
     Optional<Tour> findById(Integer id);
 
-//    @Query(value = "SELECT  * FROM tour WHERE status_id = ?1 AND (LOWER(unaccent(name)) LIKE  unaccent(?2) OR LOWER(unaccent(description)) LIKE unaccent(?2))", nativeQuery = true)
-    List<Tour> findAllByStatusId(Integer statusId, Pageable pageable);
 
+//    @Modifying
+    @Query(value = "select * FROM tour where status_id = ?1 AND name LIKE ?2", nativeQuery = true)
+    List<Tour> findAllByStatusId(Integer statusId, String search, Pageable pageable);
+
+    @Query(value = "select * FROM tour where status_id = ?1 AND provider_id = ?2 AND name LIKE ?3", nativeQuery = true)
+    List<Tour> findAllByStatusIdAndProviderId(Integer statusId, Integer providerId , String search, Pageable pageable);
 }

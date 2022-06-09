@@ -57,7 +57,9 @@ public class TourMapper {
         tourListDto.setProvider(tour.getProvider().getNameCompany());
         tourListDto.setProvince(tour.getProvince().getName());
         tourListDto.setTourImage(tour.getTourImages().iterator().next().getLink());
+        tourListDto.setDetele(tour.isDelete());
         tourListDto.setStar(star);
+        tourListDto.setSubDescription(tour.getSubDescription());
         return tourListDto;
     }
 }

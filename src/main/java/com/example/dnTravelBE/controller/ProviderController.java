@@ -1,11 +1,15 @@
 package com.example.dnTravelBE.controller;
 
+import com.example.dnTravelBE.constant.StatusEnum;
 import com.example.dnTravelBE.dto.ResponseDto;
+import com.example.dnTravelBE.dto.ResponseTourListDto;
 import com.example.dnTravelBE.dto.TourDto;
 import com.example.dnTravelBE.service.TourService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.constraints.Min;
 
 @RestController
 @RequestMapping("/provider")
@@ -14,9 +18,14 @@ import org.springframework.web.bind.annotation.*;
 public class ProviderController {
 
     private final TourService tourService;
-    @GetMapping("tours")
-    private ResponseEntity<Object> getTours() {
-        return null;
+
+    @GetMapping("tours/{id}/{status}")
+    private ResponseEntity<Object> getTours(@PathVariable("status") StatusEnum status,
+                                            @PathVariable("id") Integer id,
+                                            @RequestParam(defaultValue = "0") @Min(0) Integer page,
+                                            @RequestParam(defaultValue = "") String keyword) {
+        ResponseTourListDto responseTourListDto = tourService.getAllTourProvider(id, status, page, keyword);
+        return ResponseEntity.ok(ResponseDto.response(responseTourListDto));
     }
 
     @PostMapping("createTour")
@@ -30,9 +39,10 @@ public class ProviderController {
         return null;
     }
 
-    @PostMapping("deteleTour")
-    private ResponseEntity<Object> deteleTours() {
-        return null;
+    @PostMapping("deteleTour/{id}/{status}")
+    private ResponseEntity<Object> deteleTours(@PathVariable("status") boolean status, @PathVariable("id") Integer id) {
+        tourService.setStatusTour(id, status);
+        return ResponseEntity.ok(ResponseDto.responseWithoutData());
     }
 
     @GetMapping("bookTousComplete")
