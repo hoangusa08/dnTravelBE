@@ -28,6 +28,7 @@ public class TourServiceImpl implements TourService {
     private final ProviderRepository providerRepository;
     private final ProvinceRepo provinceRepo;
     private final TourRepo tourRepo;
+    private final TourRepoJpa tourRepoJpa;
     private final StatusRepository statusRepository;
     private final CategoryRepo categoryRepo;
     private final TourImageRepo tourImageRepo;
@@ -74,7 +75,9 @@ public class TourServiceImpl implements TourService {
             tour.setCategory(category);
             tour.setProvider(provider);
             tour.setDelete(false);
-            Tour newTour = tourRepo.save(tour);
+            System.out.println("abc");
+            Tour newTour = tourRepoJpa.save(tour);
+            System.out.println("abc1");
             for (int i = 0; i< tourDto.getTourImage().size(); i++){
                 TourImage tourImage = new TourImage();
                 tourImage.setLink(tourDto.getTourImage().get(i));

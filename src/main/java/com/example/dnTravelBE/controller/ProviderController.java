@@ -21,7 +21,6 @@ public class ProviderController {
 
     @PostMapping("createTour")
     private ResponseEntity<Object> createTour(@RequestBody TourDto tourDto) {
-        System.out.println("abc");
         boolean status = tourService.createTour(tourDto);
         return ResponseEntity.ok(ResponseDto.responseWithoutData());
     }
