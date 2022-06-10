@@ -19,8 +19,9 @@ public class TourController {
     @GetMapping()
     public ResponseEntity<Object> getAllTourAccept(@RequestParam(defaultValue = "0") @Min(0) Integer page,
                                                    @RequestParam(defaultValue = "") String keyword) {
-        return ResponseEntity.ok(ResponseDto.response(tourService.getAllTour(StatusEnum.WAITING, page, keyword)));
+        return ResponseEntity.ok(ResponseDto.response(tourService.getAllTour(StatusEnum.ACCEPT, page, keyword)));
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<Object> getTourDeTail(@PathVariable int id)throws Exception {

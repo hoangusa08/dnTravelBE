@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.Min;
+
 @RestController
 @RequestMapping("/admin")
 @AllArgsConstructor
@@ -17,31 +19,17 @@ public class AdminController {
     private final ProviderService providerService;
     private final TourService tourService;
 
-    @GetMapping("providerAccept")
-    private ResponseEntity<Object> getProvidersAccept() {
-        return null;
+    @GetMapping("provider/{status}")
+    private ResponseEntity<Object> getProvidersAccept(@RequestParam(defaultValue = "0") @Min(0) Integer page,
+                                                      @RequestParam(defaultValue = "") String keyword,
+                                                      @PathVariable("status") StatusEnum status) {
+        return ResponseEntity.ok(ResponseDto.response(providerService.getAllProviderByStatus(status, page, keyword)));
     }
 
-    @PostMapping("/accept-provider/{id}")
-    private ResponseEntity<Object> acceptProvider(@PathVariable Integer id) {
-        providerService.changeStatusProvider(id, StatusEnum.ACCEPT);
+    @PostMapping("/provider/{status}/{id}")
+    private ResponseEntity<Object> acceptProvider(@PathVariable("id") Integer id, @PathVariable("status") StatusEnum status) {
+        providerService.changeStatusProvider(id, status);
         return ResponseEntity.ok(ResponseDto.responseWithoutData());
-    }
-
-    @GetMapping("providerRefuse")
-    private ResponseEntity<Object> getProvidersRefuse() {
-        return null;
-    }
-
-    @PostMapping("/refuse-provider/{id}")
-    private ResponseEntity<Object> refuseProvider(@PathVariable Integer id) {
-        providerService.changeStatusProvider(id, StatusEnum.REFUSE);
-        return ResponseEntity.ok(ResponseDto.responseWithoutData());
-    }
-
-    @GetMapping("providerWait")
-    private ResponseEntity<Object> getProvidersWait() {
-        return null;
     }
 
     @GetMapping("customerAccept")
@@ -59,14 +47,16 @@ public class AdminController {
         return null;
     }
 
-    @GetMapping("tourWait")
-    private ResponseEntity<Object> getToursWait() {
-        return null;
+    @GetMapping("toursAwait")
+    public ResponseEntity<Object> getAllTourAwait(@RequestParam(defaultValue = "0") @Min(0) Integer page,
+                                                  @RequestParam(defaultValue = "") String keyword) {
+        return ResponseEntity.ok(ResponseDto.response(tourService.getAllTour(StatusEnum.WAITING, page, keyword)));
     }
 
-    @GetMapping("tourRefuse")
-    private ResponseEntity<Object> getToursRefuse() {
-        return null;
+    @GetMapping("toursRefuse")
+    public ResponseEntity<Object> getAllTourRefuse(@RequestParam(defaultValue = "0") @Min(0) Integer page,
+                                                   @RequestParam(defaultValue = "") String keyword) {
+        return ResponseEntity.ok(ResponseDto.response(tourService.getAllTour(StatusEnum.REFUSE, page, keyword)));
     }
 
     @PostMapping("refuse-tour/{id}")
@@ -76,8 +66,9 @@ public class AdminController {
     }
 
     @GetMapping("toursAccept")
-    private ResponseEntity<Object> getToursAccept() {
-        return null;
+    public ResponseEntity<Object> getAllTourAccept(@RequestParam(defaultValue = "0") @Min(0) Integer page,
+                                                   @RequestParam(defaultValue = "") String keyword) {
+        return ResponseEntity.ok(ResponseDto.response(tourService.getAllTour(StatusEnum.ACCEPT, page, keyword)));
     }
 
     @PostMapping("accept-tour/{id}")
