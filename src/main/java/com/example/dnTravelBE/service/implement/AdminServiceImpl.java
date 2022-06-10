@@ -29,6 +29,7 @@ public class AdminServiceImpl implements AdminService {
                 orElseThrow(() -> new NotFoundException("Not Found provider.", 1005));
         AdminLoginResDto adminLoginResDto = new AdminLoginResDto();
         adminLoginResDto.setId(admin.getId());
+        adminLoginResDto.setRole(admin.getAccount().getRole().getName());
         return adminLoginResDto;
     }
 }

@@ -1,19 +1,20 @@
 package com.example.dnTravelBE.dto;
 
-import com.example.dnTravelBE.constant.AccountRole;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class AdminLoginResDto {
+public class ResponseProviderDto {
 
-   private Integer id;
-
-   private AccountRole role;
+    private Integer total;
+    private List<ProviderResLoginDto> providers;
+    private int page;
 
 }
