@@ -24,7 +24,15 @@ public class ProviderController {
                                             @PathVariable("id") Integer id,
                                             @RequestParam(defaultValue = "0") @Min(0) Integer page,
                                             @RequestParam(defaultValue = "") String keyword) {
-        ResponseTourListDto responseTourListDto = tourService.getAllTourProvider(id, status, page, keyword);
+        ResponseTourListDto responseTourListDto = tourService.getAllTourProvider(id, status, page, keyword, false);
+        return ResponseEntity.ok(ResponseDto.response(responseTourListDto));
+    }
+
+    @GetMapping("toursDelete/{providerId}")
+    private ResponseEntity<Object> getToursDelete(@PathVariable("providerId") Integer providerId,
+            @RequestParam(defaultValue = "0") @Min(0) Integer page,
+            @RequestParam(defaultValue = "") String keyword) {
+        ResponseTourListDto responseTourListDto = tourService.getAllTourDelete(providerId , page, keyword );
         return ResponseEntity.ok(ResponseDto.response(responseTourListDto));
     }
 

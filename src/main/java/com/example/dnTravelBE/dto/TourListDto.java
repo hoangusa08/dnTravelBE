@@ -1,5 +1,6 @@
 package com.example.dnTravelBE.dto;
 
+import com.example.dnTravelBE.constant.StatusEnum;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.models.auth.In;
 import lombok.AllArgsConstructor;
@@ -40,4 +41,6 @@ public class TourListDto {
     private Integer star;
 
     private boolean isDetele;
+
+    private StatusEnum status;
 }

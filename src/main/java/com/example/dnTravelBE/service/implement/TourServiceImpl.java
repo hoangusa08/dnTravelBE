@@ -84,7 +84,6 @@ public class TourServiceImpl implements TourService {
                 tourImageRepo.save(tourImage);
             }
             for (int i = 0; i < tourDto.getSchedules().size(); i++) {
-                System.out.println(tourDto.getSchedules().get(i));
                 Schedule schedule = new Schedule();
                 schedule.setTour(newTour);
                 schedule.setDate(tourDto.getSchedules().get(i));
@@ -116,11 +115,11 @@ public class TourServiceImpl implements TourService {
     }
 
     @Override
-    public ResponseTourListDto getAllTourProvider(Integer providerId, StatusEnum statusEnum, Integer page, String keyword) {
+    public ResponseTourListDto getAllTourProvider(Integer providerId, StatusEnum statusEnum, Integer page, String keyword, boolean isDelete) {
         Pageable pageable = PageRequest.of(page, sizePage);
         Status status = statusRepository.findByName(statusEnum).
                 orElseThrow(() -> new NotFoundException("Not Found status.", 1111));
-        List<Tour> tours = tourRepo.findAllByStatusIdAndProviderId(status.getId(), providerId, "%" + keyword + "%", pageable);
+        List<Tour> tours = tourRepo.findAllByStatusIdAndProviderId(status.getId(), providerId, "%" + keyword + "%", isDelete, pageable);
         Integer total = (Integer) totalTourPages(statusEnum);
         ResponseTourListDto responseTourListDto = new ResponseTourListDto();
         List<TourListDto> tourListDtos = new ArrayList<>();
@@ -184,5 +183,23 @@ public class TourServiceImpl implements TourService {
         } catch (Exception e) {
             throw new FailException("Can't update isDelete tour", 1020);
         }
+    }
+
+    @Override
+    public ResponseTourListDto getAllTourDelete(Integer providerId, Integer page, String keyword) {
+        Pageable pageable = PageRequest.of(page, sizePage);
+        boolean test = true;
+        List<Tour> tours = tourRepo.findAllByProviderIdAnDelete(providerId,"%" + keyword + "%", test,pageable);
+        System.out.println(tours.size());
+        ResponseTourListDto responseTourListDto = new ResponseTourListDto();
+        List<TourListDto> tourListDtos = new ArrayList<>();
+        for (Tour tour : tours) {
+            TourListDto tourListDto = TourMapper.mapToTourListDto(tour, 5);
+            tourListDtos.add(tourListDto);
+        }
+        responseTourListDto.setTours(tourListDtos);
+        responseTourListDto.setTotal(2);
+        responseTourListDto.setPage(page);
+        return responseTourListDto;
     }
 }

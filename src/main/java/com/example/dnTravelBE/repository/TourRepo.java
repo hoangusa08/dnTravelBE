@@ -19,11 +19,12 @@ public interface TourRepo extends JpaRepository<Tour, Integer> {
 
     Optional<Tour> findById(Integer id);
 
-
-//    @Modifying
     @Query(value = "select * FROM tour where status_id = ?1 AND name LIKE ?2", nativeQuery = true)
     List<Tour> findAllByStatusId(Integer statusId, String search, Pageable pageable);
 
-    @Query(value = "select * FROM tour where status_id = ?1 AND provider_id = ?2 AND name LIKE ?3", nativeQuery = true)
-    List<Tour> findAllByStatusIdAndProviderId(Integer statusId, Integer providerId , String search, Pageable pageable);
+    @Query(value = "select * FROM tour where status_id = ?1 AND provider_id = ?2 AND name LIKE ?3 AND is_delete = ?4", nativeQuery = true)
+    List<Tour> findAllByStatusIdAndProviderId(Integer statusId, Integer providerId , String search, boolean isDelete, Pageable pageable);
+
+    @Query(value = "select * FROM tour where provider_id = ?1 AND name LIKE ?2 AND is_delete = ?3", nativeQuery = true)
+    List<Tour> findAllByProviderIdAnDelete(Integer providerId , String search, boolean isDelete, Pageable pageable);
 }

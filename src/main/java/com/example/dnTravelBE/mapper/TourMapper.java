@@ -59,6 +59,7 @@ public class TourMapper {
         tourListDto.setTourImage(tour.getTourImages().iterator().next().getLink());
         tourListDto.setDetele(tour.isDelete());
         tourListDto.setStar(star);
+        tourListDto.setStatus(tour.getStatus().getName());
         tourListDto.setSubDescription(tour.getSubDescription());
         return tourListDto;
     }
