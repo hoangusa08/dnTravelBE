@@ -18,6 +18,7 @@ public class RegisterProviderDto {
     private String email;
     private String password;
     private String nameCompany;
+    private String owner;
     private String address;
     private String phoneNumber;
     private String bankNumber;

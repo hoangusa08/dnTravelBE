@@ -3,15 +3,13 @@ package com.example.dnTravelBE.service.implement;
 import com.example.dnTravelBE.constant.AccountRole;
 import com.example.dnTravelBE.constant.StatusEnum;
 import com.example.dnTravelBE.dto.*;
-import com.example.dnTravelBE.entity.Account;
-import com.example.dnTravelBE.entity.Provider;
-import com.example.dnTravelBE.entity.Status;
-import com.example.dnTravelBE.entity.Tour;
+import com.example.dnTravelBE.entity.*;
 import com.example.dnTravelBE.exception.FailException;
 import com.example.dnTravelBE.exception.NotFoundException;
 import com.example.dnTravelBE.mapper.ProviderMapper;
 import com.example.dnTravelBE.mapper.TourMapper;
 import com.example.dnTravelBE.repository.AccountRepository;
+import com.example.dnTravelBE.repository.BankRepo;
 import com.example.dnTravelBE.repository.ProviderRepository;
 import com.example.dnTravelBE.repository.StatusRepository;
 import com.example.dnTravelBE.service.ProviderService;
@@ -31,6 +29,7 @@ public class ProviderServiceImpl implements ProviderService {
     private final StatusRepository statusRepository;
     private final ProviderRepository providerRepository;
     private final AccountRepository accountRepository;
+    private final BankRepo bankRepo;
 
     private static int sizePage = 5;
 
@@ -51,14 +50,18 @@ public class ProviderServiceImpl implements ProviderService {
 
         Status status = statusRepository.findByName(StatusEnum.WAITING)
                 .orElseThrow(() -> new NotFoundException("Status input invalid" , 1032));
+        Bank bank = bankRepo.findBankById(registerProviderDto.getBankId())
+                .orElseThrow(() -> new NotFoundException("Bank input invalid" , 1033));
         try {
             Provider provider = new Provider();
-            provider.setAccount(account);
             provider.setNameCompany(registerProviderDto.getNameCompany());
-            provider.setAddress(registerProviderDto.getAddress());
-            provider.setStatus(status);
-            provider.setBankNumber(registerProviderDto.getBankNumber());
+            provider.setOwner(registerProviderDto.getOwner());
             provider.setPhoneNumber(registerProviderDto.getPhoneNumber());
+            provider.setAddress(registerProviderDto.getAddress());
+            provider.setBankNumber(registerProviderDto.getBankNumber());
+            provider.setStatus(status);
+            provider.setAccount(account);
+            provider.setBank(bank);
             providerRepository.save(provider);
         }catch (Exception e) {
             throw new FailException("Cann't create provider", 2002);
@@ -77,15 +80,7 @@ public class ProviderServiceImpl implements ProviderService {
         if (provider.getStatus().getName() == StatusEnum.REFUSE ){
             throw new FailException("YYour account has been locked", 2004);
         }
-        ProviderResLoginDto providerResLoginDto = new ProviderResLoginDto(
-                provider.getNameCompany(),
-                provider.getOwner(),
-                provider.getId(),
-                provider.getPhoneNumber(),
-                provider.getAccount().getRole().getName().name(),
-                provider.getAddress(),
-                provider.getBankNumber()
-        );
+        ProviderResLoginDto providerResLoginDto = ProviderMapper.mapToProviderResLoginDTo(provider);
         return providerResLoginDto;
     }
 

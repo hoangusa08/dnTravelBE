@@ -13,6 +13,7 @@ public class ProviderMapper {
         providerResLoginDto.setPhoneNumber(provider.getPhoneNumber());
         providerResLoginDto.setOwner(provider.getOwner());
         providerResLoginDto.setNameConpany(provider.getNameCompany());
+        providerResLoginDto.setEmail(provider.getAccount().getEmail());
         providerResLoginDto.setRole(provider.getAccount().getRole().getName().toString());
         return providerResLoginDto;
     }

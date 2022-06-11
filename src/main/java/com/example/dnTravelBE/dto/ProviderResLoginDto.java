@@ -18,5 +18,6 @@ public class ProviderResLoginDto {
     private String role;
     private String address;
     private String bankNumber;
+    private String email;
 
 }
