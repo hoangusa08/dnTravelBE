@@ -33,10 +33,7 @@ public class ProviderServiceImpl implements ProviderService {
 
     private static int sizePage = 5;
 
-    public int totalTourPages(StatusEnum statusEnum) {
-        Status status = statusRepository.findByName(statusEnum).
-                orElseThrow(() -> new NotFoundException("Not Found status.", 1112));
-        int count = providerRepository.countAllByStatus(status);
+    public int totalTourPages(int count) {
         if (count <= sizePage) {
             return 1;
         } else if (count % sizePage != 0) {
@@ -104,7 +101,8 @@ public class ProviderServiceImpl implements ProviderService {
         Status status = statusRepository.findByName(statusEnum).
                 orElseThrow(() -> new NotFoundException("Not Found status.", 1111));
         List<Provider> providers = providerRepository.findAllByStatusId(status.getId(), "%" + keyword + "%", pageable);
-        Integer total = (Integer) totalTourPages(statusEnum);
+        int count = providerRepository.countAllByStatusId(status.getId(), "%" + keyword + "%");
+        Integer total = (Integer) totalTourPages(count);
         ResponseProviderDto responseProviderDto = new ResponseProviderDto();
         List<ProviderResLoginDto> providerResLoginDtos = new ArrayList<>();
         for (Provider provider : providers) {

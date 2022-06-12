@@ -33,12 +33,12 @@ public class TourServiceImpl implements TourService {
     private final RateTourRepo rateTourRepo;
     private final CustomerRepository customerRepository;
 
-    private static int sizePage = 5;
+    private static int sizePage = 2;
 
-    public int totalTourPages(StatusEnum statusEnum) {
-        Status status = statusRepository.findByName(statusEnum).
-                orElseThrow(() -> new NotFoundException("Not Found status.", 1112));
-        int count = tourRepo.countAllByStatus(status);
+    public int totalTourPages(int count) {
+//        Status status = statusRepository.findByName(statusEnum).
+//                orElseThrow(() -> new NotFoundException("Not Found status.", 1112));
+//        int count = tourRepo.countAllByStatus(status);
         if (count <= sizePage) {
             return 1;
         } else if (count % sizePage != 0) {
@@ -101,7 +101,8 @@ public class TourServiceImpl implements TourService {
         Status status = statusRepository.findByName(statusEnum).
                 orElseThrow(() -> new NotFoundException("Not Found status.", 1111));
         List<Tour> tours = tourRepo.findAllByStatusId(status.getId(), "%" + keyword + "%", pageable);
-        Integer total = (Integer) totalTourPages(statusEnum);
+        int count = tourRepo.countAllByStatusAndSearch(status.getId(), "%" + keyword + "%");
+        Integer total = (Integer) totalTourPages(count);
         ResponseTourListDto responseTourListDto = new ResponseTourListDto();
         List<TourListDto> tourListDtos = new ArrayList<>();
         for (Tour tour : tours) {
@@ -120,7 +121,8 @@ public class TourServiceImpl implements TourService {
         Status status = statusRepository.findByName(statusEnum).
                 orElseThrow(() -> new NotFoundException("Not Found status.", 1111));
         List<Tour> tours = tourRepo.findAllByStatusIdAndProviderId(status.getId(), providerId, "%" + keyword + "%", isDelete, pageable);
-        Integer total = (Integer) totalTourPages(statusEnum);
+        int count = tourRepo.countAllByProviderAndStatusAndSearch(status.getId(), "%" + keyword + "%", providerId);
+        Integer total = (Integer) totalTourPages(count);
         ResponseTourListDto responseTourListDto = new ResponseTourListDto();
         List<TourListDto> tourListDtos = new ArrayList<>();
         for (Tour tour : tours) {
@@ -189,8 +191,9 @@ public class TourServiceImpl implements TourService {
     public ResponseTourListDto getAllTourDelete(Integer providerId, Integer page, String keyword) {
         Pageable pageable = PageRequest.of(page, sizePage);
         boolean test = true;
-        List<Tour> tours = tourRepo.findAllByProviderIdAnDelete(providerId,"%" + keyword + "%", test,pageable);
-        System.out.println(tours.size());
+        List<Tour> tours = tourRepo.findAllByProviderIdAnDelete(providerId,"%" + keyword + "%", test ,pageable);
+        int count = tourRepo.countAllByDelete(providerId, "%" + keyword + "%" , test);
+        Integer total = (Integer) totalTourPages(count);
         ResponseTourListDto responseTourListDto = new ResponseTourListDto();
         List<TourListDto> tourListDtos = new ArrayList<>();
         for (Tour tour : tours) {
@@ -198,7 +201,7 @@ public class TourServiceImpl implements TourService {
             tourListDtos.add(tourListDto);
         }
         responseTourListDto.setTours(tourListDtos);
-        responseTourListDto.setTotal(2);
+        responseTourListDto.setTotal(total);
         responseTourListDto.setPage(page);
         return responseTourListDto;
     }

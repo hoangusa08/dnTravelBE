@@ -27,4 +27,14 @@ public interface TourRepo extends JpaRepository<Tour, Integer> {
 
     @Query(value = "select * FROM tour where provider_id = ?1 AND name LIKE ?2 AND is_delete = ?3", nativeQuery = true)
     List<Tour> findAllByProviderIdAnDelete(Integer providerId , String search, boolean isDelete, Pageable pageable);
+
+    @Query(value = "select count(*) from tour where status_id = ?1 and name like ?2" , nativeQuery = true)
+    int countAllByStatusAndSearch( Integer statusId , String search);
+
+    @Query(value = "select count(*) from tour where status_id = ?1 and provider_id =?3 and name like ?2" , nativeQuery = true)
+    int countAllByProviderAndStatusAndSearch( Integer statusId , String search, Integer providerId);
+
+    @Query(value = "select count(*) from tour where provider_id =?1 and name like ?2 and is_delete = ?3 ", nativeQuery = true)
+    int countAllByDelete( Integer providerId, String keyword , boolean stt);
+
 }

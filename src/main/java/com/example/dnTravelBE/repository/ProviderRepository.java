@@ -20,4 +20,7 @@ public interface ProviderRepository extends JpaRepository<Provider, Integer> {
     Optional<Provider> findById( Integer id);
     @Query(value = "select * FROM provider where status_id = ?1 AND name_company LIKE ?2", nativeQuery = true)
     List<Provider> findAllByStatusId(Integer statusId, String search, Pageable pageable);
+
+    @Query(value = "select count(*) FROM provider where status_id = ?1 AND name_company LIKE ?2", nativeQuery = true)
+    int countAllByStatusId(Integer statusId, String search);
 }
