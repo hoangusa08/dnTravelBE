@@ -45,4 +45,8 @@ public class Payment {
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "provider_id", nullable = false)
+    private Provider provider;
+
 }

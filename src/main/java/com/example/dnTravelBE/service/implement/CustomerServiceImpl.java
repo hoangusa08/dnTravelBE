@@ -72,5 +72,27 @@ public class CustomerServiceImpl implements CustomerService {
         return customerResponseLoginDto;
     }
 
+    @Override
+    public void updateCustomerDetail(CustomerResponseLoginDto customerResponseLoginDto) {
+
+        Customer customer = customerRepository.findById(customerResponseLoginDto.getId())
+                .orElseThrow(() -> new NotFoundException("Not Found Customer.", 1023));
+
+        Account account = accountRepository.findByCustomerId(customer.getId())
+                .orElseThrow(() -> new NotFoundException("Not Found Account.", 1024));
+
+        account.setUsername(customerResponseLoginDto.getUsername());
+        account.setEmail(customerResponseLoginDto.getEmail());
+        customer.setAddress(customerResponseLoginDto.getAddress());
+        customer.setFullName(customerResponseLoginDto.getFullName());
+        customer.setPhoneNumber(customerResponseLoginDto.getPhoneNumber());
+        try {
+            accountRepository.save(account);
+            customerRepository.save(customer);
+        } catch (Exception e) {
+            throw new FailException("Cann't update customer", 2002);
+        }
+
+    }
 
 }

@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -27,7 +28,7 @@ public class RateTour {
     private String comment;
 
     @NotNull(message = "Ngày tạo không được bỏ trống")
-    private Date create_at;
+    private LocalDate create_at;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "customer_id")

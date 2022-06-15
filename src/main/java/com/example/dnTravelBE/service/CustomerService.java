@@ -10,4 +10,6 @@ public interface CustomerService {
     CustomerResponseLoginDto getCustomerWhenLogin(String email);
 
     CustomerResponseLoginDto getCustomerDetail (Integer id);
+
+    void updateCustomerDetail( CustomerResponseLoginDto  customerResponseLoginDto);
 }

@@ -1,15 +1,18 @@
 package com.example.dnTravelBE.controller;
 
 import com.example.dnTravelBE.constant.StatusEnum;
+import com.example.dnTravelBE.dto.PaymentsDto;
 import com.example.dnTravelBE.dto.ResponseDto;
 import com.example.dnTravelBE.dto.ResponseTourListDto;
 import com.example.dnTravelBE.dto.TourDto;
+import com.example.dnTravelBE.service.PaymentService;
 import com.example.dnTravelBE.service.TourService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.Min;
+import java.util.List;
 
 @RestController
 @RequestMapping("/provider")
@@ -18,6 +21,8 @@ import javax.validation.constraints.Min;
 public class ProviderController {
 
     private final TourService tourService;
+
+    private final PaymentService paymentService;
 
     @GetMapping("tours/{id}/{status}")
     private ResponseEntity<Object> getTours(@PathVariable("status") StatusEnum status,
@@ -53,14 +58,17 @@ public class ProviderController {
         return ResponseEntity.ok(ResponseDto.responseWithoutData());
     }
 
-    @GetMapping("bookTousComplete")
-    private ResponseEntity<Object> getBookToursComplete() {
-        return null;
+    @GetMapping("/list-book-tour/{providerId}/{status}")
+    public ResponseEntity<Object> getListBookTour(@PathVariable("status") String status, @PathVariable("providerId") Integer providerId) {
+        List<PaymentsDto> paymentsDtos = paymentService.getAllTourProviderByStatus( status, providerId);
+        return ResponseEntity.ok(ResponseDto.response(paymentsDtos));
     }
 
-    @GetMapping("bookToursWait")
-    private ResponseEntity<Object> getBookToursWait() {
-        return null;
+    @PostMapping("/book-tour/{id}/{status}")
+    private ResponseEntity<Object> changeStatusBook(@PathVariable("status") String status,
+                                                    @PathVariable("id") Integer id) {
+        paymentService.changeStatusPayment(id, status);
+        return ResponseEntity.ok(ResponseDto.responseWithoutData());
     }
 
 

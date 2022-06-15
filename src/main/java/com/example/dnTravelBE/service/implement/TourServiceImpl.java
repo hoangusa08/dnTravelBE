@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -162,7 +163,7 @@ public class TourServiceImpl implements TourService {
                 orElseThrow(() -> new NotFoundException("Not Found Tour.", 1016));
         RateTour rateTour = new RateTour();
         rateTour.setTour(tour);
-        rateTour.setCreate_at(rateTourReq.getCreateAt());
+        rateTour.setCreate_at(LocalDate.now());
         rateTour.setComment(rateTourReq.getComment());
         rateTour.setStar(rateTourReq.getStar());
         rateTour.setCustomer(customer);

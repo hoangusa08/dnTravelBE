@@ -4,11 +4,14 @@ import com.example.dnTravelBE.constant.AccountRole;
 import com.example.dnTravelBE.dto.RegisterCustomerDto;
 import com.example.dnTravelBE.dto.RegisterProviderDto;
 import com.example.dnTravelBE.entity.Account;
+import com.example.dnTravelBE.entity.Customer;
 import com.example.dnTravelBE.entity.Role;
 import com.example.dnTravelBE.exception.FailException;
 import com.example.dnTravelBE.exception.NotFoundException;
 import com.example.dnTravelBE.repository.AccountRepository;
+import com.example.dnTravelBE.repository.CustomerRepository;
 import com.example.dnTravelBE.repository.RoleRepository;
+import com.example.dnTravelBE.request.ChangePassReq;
 import com.example.dnTravelBE.service.AccountService;
 import com.example.dnTravelBE.service.CustomerService;
 import com.example.dnTravelBE.service.ProviderService;
@@ -28,6 +31,8 @@ public class AccountServiceImpl implements AccountService {
     private final CustomerService customerService;
     private final RoleRepository roleRepository;
     private final ProviderService providerService;
+
+    private final CustomerRepository customerRepository;
 
     @Override
     public Account createAccountCustomer(RegisterCustomerDto registerCustomerDto) {
@@ -83,5 +88,19 @@ public class AccountServiceImpl implements AccountService {
     public AccountRole getRoleOfUser(String email) {
         Optional<Account> account = accountRepository.findByEmail(email);
         return account.get().getRole().getName();
+    }
+
+    @Override
+    public void updatePasswordCustomer(ChangePassReq changePassReq, Integer id) {
+        Customer customer = customerRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Customer not found", 1054));
+        Account account = accountRepository.findByCustomerId(customer.getId())
+                .orElseThrow(() -> new NotFoundException("Account not found", 1055));
+        if (account.getPassword().equals(changePassReq.getOldPassword())) {
+            account.setPassword(changePassReq.getNewPassword());
+            accountRepository.save(account);
+        } else {
+            throw new FailException("Password incorrect.", 1111);
+        }
     }
 }

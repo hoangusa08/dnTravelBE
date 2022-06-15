@@ -14,6 +14,5 @@ public class RateTourReq {
     private Integer customerId;
     private Integer star;
     private String comment;
-    private Date createAt;
     private Integer tourId;
 }
