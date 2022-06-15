@@ -20,6 +20,7 @@ public class TourDetailDto {
     private Integer childPrice;
     private String description;
     private List<String> tourImage;
-    private List<LocalDate> schedules;
+    private List<Object> schedules;
     private List<RateDto> rateTours;
+    private Double totalStar;
 }

@@ -30,7 +30,7 @@ public class RateTour {
     private Date create_at;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "cútomer_id")
+    @JoinColumn(name = "customer_id")
     private Customer customer;
 
     @ManyToOne(fetch = FetchType.EAGER)

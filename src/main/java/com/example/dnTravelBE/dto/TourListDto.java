@@ -38,7 +38,7 @@ public class TourListDto {
 
     private String tourImage;
 
-    private Integer star;
+    private Double star;
 
     private boolean isDetele;
 

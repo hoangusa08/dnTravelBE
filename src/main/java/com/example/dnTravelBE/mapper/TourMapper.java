@@ -10,9 +10,7 @@ import com.example.dnTravelBE.entity.TourImage;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class TourMapper {
 
@@ -28,26 +26,39 @@ public class TourMapper {
             tourImgs.add(tourImage.getLink());
         }
         tourDetailDto.setTourImage(tourImgs);
-        List<LocalDate> schedules = new ArrayList<>();
+        List<Object> schedules = new ArrayList<>();
         for(Schedule schedule : tour.getSchedules()){
-            schedules.add(schedule.getDate());
+            Map<String, Object> objectMap = new HashMap<>();
+            objectMap.put("id", schedule.getId());
+            objectMap.put("date" , schedule.getDate());
+            schedules.add(objectMap);
         }
         tourDetailDto.setSchedules(schedules);
         List<RateDto> rateDtos = new ArrayList<>();
+        int totalStar = 0;
+        int totalReview = 0;
         for (RateTour rateTour : tour.getRateTours()){
+            totalStar += rateTour.getStar();
+            ++totalReview;
             RateDto rateDto = new RateDto();
             rateDto.setId(rateDto.getId());
             rateDto.setComment(rateTour.getComment());
             rateDto.setAvatar_source("");
             rateDto.setStar(rateTour.getStar());
             rateDto.setCreate_at(rateTour.getCreate_at());
+            rateDto.setUser_full_name(rateTour.getCustomer().getFullName());
             rateDtos.add(rateDto);
         }
         tourDetailDto.setRateTours(rateDtos);
+        if (totalReview == 0) {
+            tourDetailDto.setTotalStar(0.0);
+        } else {
+            tourDetailDto.setTotalStar(Double.valueOf(totalStar/totalReview));
+        }
         return tourDetailDto;
     }
 
-    public  static TourListDto  mapToTourListDto (Tour tour, Integer star){
+    public  static TourListDto  mapToTourListDto (Tour tour, Double star){
         TourListDto tourListDto = new TourListDto();
         tourListDto.setId(tour.getId());
         tourListDto.setName(tour.getName());

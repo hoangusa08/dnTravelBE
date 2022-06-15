@@ -33,7 +33,7 @@ public class TourServiceImpl implements TourService {
     private final RateTourRepo rateTourRepo;
     private final CustomerRepository customerRepository;
 
-    private static int sizePage = 2;
+    private static int sizePage = 5;
 
     public int totalTourPages(int count) {
 //        Status status = statusRepository.findByName(statusEnum).
@@ -106,7 +106,19 @@ public class TourServiceImpl implements TourService {
         ResponseTourListDto responseTourListDto = new ResponseTourListDto();
         List<TourListDto> tourListDtos = new ArrayList<>();
         for (Tour tour : tours) {
-            TourListDto tourListDto = TourMapper.mapToTourListDto(tour, 5);
+            int totalStar = 0;
+            int totalReview = 0;
+            for (RateTour rateTour : tour.getRateTours()) {
+                totalStar += rateTour.getStar();
+                ++totalReview;
+            }
+            TourListDto tourListDto = new TourListDto();
+            if (totalReview != 0){
+                tourListDto = TourMapper.mapToTourListDto(tour, Double.valueOf (totalStar/totalReview) );
+            } else {
+                tourListDto = TourMapper.mapToTourListDto(tour, Double.valueOf (0) );
+            }
+
             tourListDtos.add(tourListDto);
         }
         responseTourListDto.setTours(tourListDtos);
@@ -126,7 +138,7 @@ public class TourServiceImpl implements TourService {
         ResponseTourListDto responseTourListDto = new ResponseTourListDto();
         List<TourListDto> tourListDtos = new ArrayList<>();
         for (Tour tour : tours) {
-            TourListDto tourListDto = TourMapper.mapToTourListDto(tour, 5);
+            TourListDto tourListDto = TourMapper.mapToTourListDto(tour, Double.valueOf(5));
             tourListDtos.add(tourListDto);
         }
         responseTourListDto.setTours(tourListDtos);
@@ -197,7 +209,7 @@ public class TourServiceImpl implements TourService {
         ResponseTourListDto responseTourListDto = new ResponseTourListDto();
         List<TourListDto> tourListDtos = new ArrayList<>();
         for (Tour tour : tours) {
-            TourListDto tourListDto = TourMapper.mapToTourListDto(tour, 5);
+            TourListDto tourListDto = TourMapper.mapToTourListDto(tour, Double.valueOf(5));
             tourListDtos.add(tourListDto);
         }
         responseTourListDto.setTours(tourListDtos);
