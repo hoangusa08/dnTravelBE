@@ -6,9 +6,12 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 @Transactional
 @Repository
 public interface ScheduleRepo extends JpaRepository<Schedule, Integer> {
     ArrayList<Schedule> findAllByTourId(Integer tourId);
+
+    Optional<Schedule> findById(Integer id);
 }

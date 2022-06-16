@@ -4,6 +4,7 @@ import com.example.dnTravelBE.dto.CustomerResponseLoginDto;
 import com.example.dnTravelBE.dto.PaymentsDto;
 import com.example.dnTravelBE.dto.ResponseDto;
 import com.example.dnTravelBE.request.ChangePassReq;
+import com.example.dnTravelBE.request.PaymentTourReq;
 import com.example.dnTravelBE.request.RateTourReq;
 import com.example.dnTravelBE.service.AccountService;
 import com.example.dnTravelBE.service.CustomerService;
@@ -26,6 +27,7 @@ public class CustomerController {
     private final PaymentService paymentService;
     private final AccountService accountService;
 
+
     @GetMapping("/{id}")
     public ResponseEntity<Object> getCustomerDetail(@PathVariable int id) {
         CustomerResponseLoginDto customerResponseLoginDto = customerService.getCustomerDetail(id);
@@ -43,11 +45,6 @@ public class CustomerController {
         List<PaymentsDto> paymentsDtos = paymentService.getAllTourCusTomerByStatus( status, customerId);
         return ResponseEntity.ok(ResponseDto.response(paymentsDtos));
     }
-
-//    @GetMapping("/list-book-tour-history")
-//    public ResponseEntity<Object> getListBookTourHistory() {
-//        return null;
-//    }
 
     @GetMapping("tours-watching")
     public ResponseEntity<Object> getToursWatching() {
@@ -76,8 +73,9 @@ public class CustomerController {
     }
 
     @PostMapping("/payment")
-    public ResponseEntity<Object> payment() {
-        return null;
+    public ResponseEntity<Object> payment(@RequestBody PaymentTourReq paymentTourReq) {
+        paymentService.paymentTour(paymentTourReq);
+        return ResponseEntity.ok(ResponseDto.responseWithoutData());
     }
 
     @PutMapping("/change-password/{id}")
