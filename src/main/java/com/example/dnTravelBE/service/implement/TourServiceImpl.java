@@ -134,7 +134,7 @@ public class TourServiceImpl implements TourService {
         Status status = statusRepository.findByName(statusEnum).
                 orElseThrow(() -> new NotFoundException("Not Found status.", 1111));
         List<Tour> tours = tourRepo.findAllByStatusIdAndProviderId(status.getId(), providerId, "%" + keyword + "%", isDelete, pageable);
-        int count = tourRepo.countAllByProviderAndStatusAndSearch(status.getId(), "%" + keyword + "%", providerId);
+        int count = tourRepo.countAllByProviderAndStatusAndSearch(status.getId(), "%" + keyword + "%", providerId, isDelete);
         Integer total = (Integer) totalTourPages(count);
         ResponseTourListDto responseTourListDto = new ResponseTourListDto();
         List<TourListDto> tourListDtos = new ArrayList<>();

@@ -31,8 +31,8 @@ public interface TourRepo extends JpaRepository<Tour, Integer> {
     @Query(value = "select count(*) from tour where status_id = ?1 and name like ?2" , nativeQuery = true)
     int countAllByStatusAndSearch( Integer statusId , String search);
 
-    @Query(value = "select count(*) from tour where status_id = ?1 and provider_id =?3 and name like ?2" , nativeQuery = true)
-    int countAllByProviderAndStatusAndSearch( Integer statusId , String search, Integer providerId);
+    @Query(value = "select count(*) from tour where status_id = ?1 and provider_id =?3 and name like ?2 AND is_delete = ?4" , nativeQuery = true)
+    int countAllByProviderAndStatusAndSearch( Integer statusId , String search, Integer providerId, boolean isDelete);
 
     @Query(value = "select count(*) from tour where provider_id =?1 and name like ?2 and is_delete = ?3 ", nativeQuery = true)
     int countAllByDelete( Integer providerId, String keyword , boolean stt);
