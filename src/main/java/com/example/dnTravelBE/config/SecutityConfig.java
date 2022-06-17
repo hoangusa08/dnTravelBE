@@ -1,5 +1,6 @@
 package com.example.dnTravelBE.config;
 
+import com.example.dnTravelBE.constant.AccountRole;
 import com.example.dnTravelBE.filter.JwtFilter;
 import com.example.dnTravelBE.service.CustomUserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,8 +37,9 @@ public class SecutityConfig extends WebSecurityConfigurerAdapter {
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
+
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return NoOpPasswordEncoder.getInstance();
     }
 
@@ -45,13 +47,13 @@ public class SecutityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/authen").permitAll(); // Cho phép tất cả mọi người truy cập vào 2 địa chỉ này
+                .antMatchers("/authen/**", "/tour", "bank", "/category", "/province").permitAll();// Cho phép tất cả mọi người truy cập vào 2 địa chỉ này
 //                .anyRequest().authenticated() // Tất cả các request khác đều cần phải xác thực mới được truy cập
 //                .and()
 //                .exceptionHandling().and().sessionManagement()
 //                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-//        http.authorizeRequests().antMatchers("/admin/**").hasAnyAuthority("admin", "user");
-//        http.authorizeRequests().antMatchers("/one/**").hasAuthority( "user");
+//        http.authorizeRequests().antMatchers("/admin/**").hasAuthority("ROLE_ADMIN");
+//        http.authorizeRequests().antMatchers("/provider/**").hasAuthority("ROLE_PROVIDER");
         http.authorizeRequests().and()
                 .exceptionHandling().and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
