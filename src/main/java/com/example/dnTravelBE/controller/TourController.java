@@ -16,6 +16,7 @@ import javax.validation.constraints.Min;
 public class TourController {
 
     private final TourService tourService;
+
     @GetMapping()
     public ResponseEntity<Object> getAllTourAccept(@RequestParam(defaultValue = "0") @Min(0) Integer page,
                                                    @RequestParam(defaultValue = "") String keyword) {
@@ -24,17 +25,33 @@ public class TourController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getTourDeTail(@PathVariable int id)throws Exception {
+    public ResponseEntity<Object> getTourDeTail(@PathVariable int id) throws Exception {
         return ResponseEntity.ok(ResponseDto.response(tourService.getTourDetailById(id)));
     }
 
     @GetMapping("/new-tours")
-    public ResponseEntity<Object> getNewTours()throws Exception {
+    public ResponseEntity<Object> getNewTours() throws Exception {
         return null;
     }
 
     @GetMapping("list-rate-tour")
-    public ResponseEntity<Object> getRateTour( ) {
+    public ResponseEntity<Object> getRateTour() {
         return null;
+    }
+
+
+    @GetMapping("/dasdboard/tour")
+    public ResponseEntity<Object> getToursDashboard(){
+        return tourService.getToursDashboard();
+    }
+
+    @GetMapping("/category/{id}")
+    public ResponseEntity<Object> getToursByCate(@PathVariable("id") Integer id) {
+        return ResponseEntity.ok(ResponseDto.response(tourService.getAllTourByCategory(id)));
+    }
+
+    @GetMapping("/province/{id}")
+    public ResponseEntity<Object> getToursByProvince(@PathVariable("id") Integer id) {
+        return ResponseEntity.ok(ResponseDto.response(tourService.getAllTourByProvince(id)));
     }
 }

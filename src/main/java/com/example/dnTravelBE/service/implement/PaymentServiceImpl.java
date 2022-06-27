@@ -18,6 +18,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -85,6 +86,7 @@ public class PaymentServiceImpl implements PaymentService {
         payment.setTour(tour);
         payment.setCustomer(customer);
         payment.setProvider(tour.getProvider());
+        payment.setCreateAt(LocalDate.now());
         try {
             paymentRepo.save(payment);
         }catch (Exception e) {

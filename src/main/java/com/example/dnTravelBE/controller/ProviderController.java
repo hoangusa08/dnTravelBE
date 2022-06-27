@@ -5,6 +5,7 @@ import com.example.dnTravelBE.dto.PaymentsDto;
 import com.example.dnTravelBE.dto.ResponseDto;
 import com.example.dnTravelBE.dto.ResponseTourListDto;
 import com.example.dnTravelBE.dto.TourDto;
+import com.example.dnTravelBE.request.TourEditRes;
 import com.example.dnTravelBE.service.PaymentService;
 import com.example.dnTravelBE.service.TourService;
 import lombok.AllArgsConstructor;
@@ -71,5 +72,15 @@ public class ProviderController {
         return ResponseEntity.ok(ResponseDto.responseWithoutData());
     }
 
+    @GetMapping("tour-detail/{id}")
+    private ResponseEntity<Object> getTourDetail(@PathVariable("id") Integer id){
+        return ResponseEntity.ok(ResponseDto.response(tourService.getTourDetailById(id)));
+    }
 
+    @PutMapping("tour-detail/{id}")
+    private ResponseEntity<Object> editTour(@PathVariable("id") Integer id,
+                                            @RequestBody TourEditRes tourEditRes){
+        tourService.editTour(id, tourEditRes);
+        return ResponseEntity.ok(ResponseDto.responseWithoutData());
+    }
 }

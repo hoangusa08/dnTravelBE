@@ -2,6 +2,7 @@ package com.example.dnTravelBE.controller;
 
 import com.example.dnTravelBE.dto.CustomerResponseLoginDto;
 import com.example.dnTravelBE.dto.PaymentsDto;
+import com.example.dnTravelBE.dto.RateTourDetail;
 import com.example.dnTravelBE.dto.ResponseDto;
 import com.example.dnTravelBE.request.ChangePassReq;
 import com.example.dnTravelBE.request.PaymentTourReq;
@@ -82,6 +83,13 @@ public class CustomerController {
     public ResponseEntity<Object> changePass(@PathVariable("id") Integer id, @RequestBody ChangePassReq changePassReq) {
         accountService.updatePasswordCustomer(changePassReq, id);
         return ResponseEntity.ok(ResponseDto.responseWithoutData());
+    }
+
+    @GetMapping("/tour/rate-tour/{tourId}/{customerId}")
+    public ResponseEntity<Object> getRayeTourByCustomerId(@PathVariable("tourId") Integer tourId,
+                                                          @PathVariable("customerId") Integer customerId){
+        RateTourDetail rateTourDetail = tourService.getRateTourDetailById(tourId, customerId);
+        return ResponseEntity.ok(ResponseDto.response(rateTourDetail));
     }
 
 }

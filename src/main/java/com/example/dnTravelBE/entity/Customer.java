@@ -28,6 +28,9 @@ public class Customer {
     @NotNull
     private String phoneNumber;
 
+    @NotNull
+    private boolean isDelete;
+
     @OneToOne
     @JoinColumn(name = "account_id")
     private Account account;

@@ -23,4 +23,8 @@ public class TourDetailDto {
     private List<Object> schedules;
     private List<RateDto> rateTours;
     private Double totalStar;
+    private Object category;
+    private Object locationStart;
+    private String subDescription;
+    private Integer dateNumber;
 }

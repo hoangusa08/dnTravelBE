@@ -27,6 +27,9 @@ public class RateTour {
     @Column(length = 10000)
     private String comment;
 
+    @NotNull
+    private boolean isDelete;
+
     @NotNull(message = "Ngày tạo không được bỏ trống")
     private LocalDate create_at;
 

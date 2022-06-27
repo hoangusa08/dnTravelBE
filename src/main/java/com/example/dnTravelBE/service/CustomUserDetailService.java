@@ -25,6 +25,6 @@ public class CustomUserDetailService implements UserDetailsService {
         Optional<Account> account = accountRepository.findByEmail(email);
         List<GrantedAuthority> authenAccount = new ArrayList<>();
         authenAccount.add(new SimpleGrantedAuthority(account.get().getRole().getName().toString()));
-        return  new org.springframework.security.core.userdetails.User(account.get().getEmail() , account.get().getPassword() , authenAccount);
+        return  new org.springframework.security.core.userdetails.User(account.get().getEmail() , account.get().getPassword(), new ArrayList<>());
     }
 }

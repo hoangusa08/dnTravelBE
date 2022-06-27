@@ -1,10 +1,13 @@
 package com.example.dnTravelBE.repository;
 
+import com.example.dnTravelBE.entity.Account;
 import com.example.dnTravelBE.entity.Payment;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,4 +20,18 @@ public interface PaymentRepo extends JpaRepository<Payment, Integer> {
     List<Payment> findByProviderIdAndStatus ( Integer providerId, String status);
 
     Optional<Payment> findById (Integer id);
+
+    @Query(value = "select count(*) total from payment where status =?1", nativeQuery = true)
+    int countAllByStatus( String status);
+
+
+    @Query(value = "SELECT * FROM payment WHERE status = ?1 and create_at BETWEEN ?2 AND ?3 ", nativeQuery = true)
+    List<Payment> findAllByStatusAndDAndCreateAt(String  status, LocalDate start, LocalDate end);
+
+    @Query(value = "select product, sum(amount) \n" +
+            "       from payment \n" +
+            "       group by tour_id \n" +
+            "       order by sum(amount) desc \n" +
+            "       limit 6;", nativeQuery = true)
+    List<Payment> getListTopPayment();
 }

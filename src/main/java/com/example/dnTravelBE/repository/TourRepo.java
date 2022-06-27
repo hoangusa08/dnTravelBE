@@ -1,5 +1,7 @@
 package com.example.dnTravelBE.repository;
 
+import com.example.dnTravelBE.entity.Category;
+import com.example.dnTravelBE.entity.Province;
 import com.example.dnTravelBE.entity.Status;
 import com.example.dnTravelBE.entity.Tour;
 import org.springframework.data.domain.Pageable;
@@ -37,4 +39,15 @@ public interface TourRepo extends JpaRepository<Tour, Integer> {
     @Query(value = "select count(*) from tour where provider_id =?1 and name like ?2 and is_delete = ?3 ", nativeQuery = true)
     int countAllByDelete( Integer providerId, String keyword , boolean stt);
 
+    @Query(value = "select count(*) from tour where status_id =?1 and is_delete = ?2 ", nativeQuery = true)
+    int countAllByAdmin( Integer statusId, boolean stt);
+
+    @Query(value = "select * from tour where start_location=?1 and status_id =?2 and is_delete = ?3 ", nativeQuery = true)
+    List<Tour> findAllByProvinceAndStatusAndDelete(Integer provinceId, Integer statusid , boolean delete);
+
+    @Query(value = "select * from tour where category_id=?1 and is_delete = ?2 and status_id=?3", nativeQuery = true)
+    List<Tour> findAllByCategoryIdAndStatusIdAndDelete(Integer categoryId, boolean delete, Integer statusId);
+
+    @Query(value = "select * from tour where start_location=?1 and is_delete = ?2  and status_id=?3", nativeQuery = true)
+    List<Tour> findAllByProvinceIdAnAndStatusIdAndDelete(Integer provinceId, boolean delete, Integer statusId);
 }

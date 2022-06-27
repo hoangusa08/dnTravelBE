@@ -8,16 +8,18 @@ import com.example.dnTravelBE.exception.NotFoundException;
 import com.example.dnTravelBE.mapper.TourMapper;
 import com.example.dnTravelBE.repository.*;
 import com.example.dnTravelBE.request.RateTourReq;
+import com.example.dnTravelBE.request.TourEditRes;
 import com.example.dnTravelBE.service.TourService;
+import io.jsonwebtoken.impl.crypto.MacProvider;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service
 @Transactional
@@ -37,9 +39,6 @@ public class TourServiceImpl implements TourService {
     private static int sizePage = 5;
 
     public int totalTourPages(int count) {
-//        Status status = statusRepository.findByName(statusEnum).
-//                orElseThrow(() -> new NotFoundException("Not Found status.", 1112));
-//        int count = tourRepo.countAllByStatus(status);
         if (count <= sizePage) {
             return 1;
         } else if (count % sizePage != 0) {
@@ -114,10 +113,10 @@ public class TourServiceImpl implements TourService {
                 ++totalReview;
             }
             TourListDto tourListDto = new TourListDto();
-            if (totalReview != 0){
-                tourListDto = TourMapper.mapToTourListDto(tour, Double.valueOf (totalStar/totalReview) );
+            if (totalReview != 0) {
+                tourListDto = TourMapper.mapToTourListDto(tour, Double.valueOf(totalStar / totalReview));
             } else {
-                tourListDto = TourMapper.mapToTourListDto(tour, Double.valueOf (0) );
+                tourListDto = TourMapper.mapToTourListDto(tour, Double.valueOf(0));
             }
 
             tourListDtos.add(tourListDto);
@@ -152,7 +151,7 @@ public class TourServiceImpl implements TourService {
     public TourDetailDto getTourDetailById(Integer id) {
         Tour tour = tourRepo.findById(id).
                 orElseThrow(() -> new NotFoundException("Not Found Tour.", 1014));
-        return TourMapper.toTourDetailDto(tour);
+        return TourMapper.toTourDetailDtoDetail(tour);
     }
 
     @Override
@@ -167,16 +166,12 @@ public class TourServiceImpl implements TourService {
         rateTour.setComment(rateTourReq.getComment());
         rateTour.setStar(rateTourReq.getStar());
         rateTour.setCustomer(customer);
+        rateTour.setDelete(false);
         try {
             rateTourRepo.save(rateTour);
         } catch (Exception e) {
             throw new FailException("Can't create an rate tour", 1020);
         }
-    }
-
-    @Override
-    public void editTour() {
-
     }
 
     @Override
@@ -204,8 +199,8 @@ public class TourServiceImpl implements TourService {
     public ResponseTourListDto getAllTourDelete(Integer providerId, Integer page, String keyword) {
         Pageable pageable = PageRequest.of(page, sizePage);
         boolean test = true;
-        List<Tour> tours = tourRepo.findAllByProviderIdAnDelete(providerId,"%" + keyword + "%", test ,pageable);
-        int count = tourRepo.countAllByDelete(providerId, "%" + keyword + "%" , test);
+        List<Tour> tours = tourRepo.findAllByProviderIdAnDelete(providerId, "%" + keyword + "%", test, pageable);
+        int count = tourRepo.countAllByDelete(providerId, "%" + keyword + "%", test);
         Integer total = (Integer) totalTourPages(count);
         ResponseTourListDto responseTourListDto = new ResponseTourListDto();
         List<TourListDto> tourListDtos = new ArrayList<>();
@@ -217,5 +212,180 @@ public class TourServiceImpl implements TourService {
         responseTourListDto.setTotal(total);
         responseTourListDto.setPage(page);
         return responseTourListDto;
+    }
+
+    @Override
+    public Tour getTourDetailProvider(Integer id) {
+        Tour tour = tourRepo.findById(id).
+                orElseThrow(() -> new NotFoundException("Not Found Tour.", 1018));
+        return tour;
+    }
+
+    @Override
+    public RateTourDetail getRateTourDetailById(Integer tourId, Integer customerId) {
+        Optional<RateTour> rateTour = rateTourRepo.findByTourIdAndCustomerId(tourId, customerId);
+        RateTourDetail rateTourDetail = new RateTourDetail();
+        System.out.println(rateTour.get().getStar());
+        if (!rateTour.isEmpty()) {
+            rateTourDetail.setId(rateTour.get().getId());
+            rateTourDetail.setTourName(rateTour.get().getTour().getName());
+            rateTourDetail.setComment(rateTour.get().getComment());
+            rateTourDetail.setStar(rateTour.get().getStar());
+            rateTourDetail.setCreate_at(rateTour.get().getCreate_at());
+        }
+        return rateTourDetail;
+    }
+
+    @Override
+    public ResponseEntity getToursDashboard() {
+        Optional<Province> province1 = provinceRepo.findById(1);
+        Optional<Province> province2 = provinceRepo.findById(2);
+
+        Optional<Status> status = statusRepository.findByName(StatusEnum.ACCEPT);
+        boolean test = false;
+
+        List<Tour> tour1 = tourRepo.findAllByProvinceAndStatusAndDelete(province1.get().getId(), status.get().getId(), test);
+        List<Tour> tour2 = tourRepo.findAllByProvinceAndStatusAndDelete(province2.get().getId(), status.get().getId(), test);
+
+        List<TourListDto> resTours1 = new ArrayList<>();
+        List<TourListDto> resTours2 = new ArrayList<>();
+
+        for (Tour tour : tour1) {
+            int totalStar = 0;
+            int totalReview = 0;
+            for (RateTour rateTour : tour.getRateTours()) {
+                totalStar += rateTour.getStar();
+                ++totalReview;
+            }
+            TourListDto tourListDto = new TourListDto();
+            if (totalReview != 0) {
+                tourListDto = TourMapper.mapToTourListDto(tour, Double.valueOf(totalStar / totalReview));
+            } else {
+                tourListDto = TourMapper.mapToTourListDto(tour, Double.valueOf(0));
+            }
+
+            resTours1.add(tourListDto);
+        }
+
+        for (Tour tour : tour2) {
+            int totalStar = 0;
+            int totalReview = 0;
+            for (RateTour rateTour : tour.getRateTours()) {
+                totalStar += rateTour.getStar();
+                ++totalReview;
+            }
+            TourListDto tourListDto = new TourListDto();
+            if (totalReview != 0) {
+                tourListDto = TourMapper.mapToTourListDto(tour, Double.valueOf(totalStar / totalReview));
+            } else {
+                tourListDto = TourMapper.mapToTourListDto(tour, Double.valueOf(0));
+            }
+
+            resTours2.add(tourListDto);
+        }
+
+        Map<String, Object> res = new HashMap<>();
+        res.put("start1" , province1.get());
+        res.put("start2" , province2.get());
+        res.put("tours1" , resTours1);
+        res.put("tours2" , resTours2);
+        return ResponseEntity.ok(ResponseDto.response(res));
+    }
+
+    @Override
+    public ResponseTourListDto getAllTourByCategory(Integer categoryId) {
+        boolean test = false;
+        ResponseTourListDto responseTourListDto = new ResponseTourListDto();
+        Optional<Status> status = statusRepository.findByName(StatusEnum.ACCEPT);
+        List<Tour> tours = tourRepo.findAllByCategoryIdAndStatusIdAndDelete(categoryId, test, status.get().getId());
+        List<TourListDto> resTours1 = new ArrayList<>();
+        for (Tour tour : tours) {
+            int totalStar = 0;
+            int totalReview = 0;
+            for (RateTour rateTour : tour.getRateTours()) {
+                totalStar += rateTour.getStar();
+                ++totalReview;
+            }
+            TourListDto tourListDto = new TourListDto();
+            if (totalReview != 0) {
+                tourListDto = TourMapper.mapToTourListDto(tour, Double.valueOf(totalStar / totalReview));
+            } else {
+                tourListDto = TourMapper.mapToTourListDto(tour, Double.valueOf(0));
+            }
+
+            resTours1.add(tourListDto);
+        }
+        responseTourListDto.setTours(resTours1);
+        responseTourListDto.setPage(0);
+        responseTourListDto.setTotal(1);
+        return responseTourListDto;
+    }
+
+    @Override
+    public ResponseTourListDto getAllTourByProvince(Integer provinceId) {
+        boolean test = false;
+        ResponseTourListDto responseTourListDto = new ResponseTourListDto();
+        Optional<Status> status = statusRepository.findByName(StatusEnum.ACCEPT);
+        List<Tour> tours = tourRepo.findAllByProvinceIdAnAndStatusIdAndDelete(provinceId, test, status.get().getId());
+        List<TourListDto> resTours1 = new ArrayList<>();
+        for (Tour tour : tours) {
+            int totalStar = 0;
+            int totalReview = 0;
+            for (RateTour rateTour : tour.getRateTours()) {
+                totalStar += rateTour.getStar();
+                ++totalReview;
+            }
+            TourListDto tourListDto = new TourListDto();
+            if (totalReview != 0) {
+                tourListDto = TourMapper.mapToTourListDto(tour, Double.valueOf(totalStar / totalReview));
+            } else {
+                tourListDto = TourMapper.mapToTourListDto(tour, Double.valueOf(0));
+            }
+
+            resTours1.add(tourListDto);
+        }
+        responseTourListDto.setTours(resTours1);
+        responseTourListDto.setPage(0);
+        responseTourListDto.setTotal(1);
+        return responseTourListDto;
+    }
+
+    @Override
+    public void editTour(Integer tourId, TourEditRes tourEditRes) {
+
+        Tour tour = tourRepo.findById(tourId).
+                orElseThrow(() -> new NotFoundException("Not Found Tour.", 1019));
+        System.out.println(tourEditRes.getCategoryId());
+        Category category = categoryRepo.findById(tourEditRes.getCategoryId())
+                .orElseThrow(() -> new NotFoundException("Not Found category.", 1020));
+
+        Province province = provinceRepo.findById(tourEditRes.getProvinceId())
+                .orElseThrow(() -> new NotFoundException("Not Found province.", 1021));
+
+        tour.setName(tourEditRes.getName());
+        tour.setAdultPrice(tourEditRes.getAdultPrice());
+        tour.setChildPrice(tourEditRes.getChildPrice());
+        tour.setDescription(tourEditRes.getDescription());
+        tour.setNumberDate(tourEditRes.getDateNumber());
+        tour.setSubDescription(tourEditRes.getSubDescription());
+        tour.setCategory(category);
+        tour.setProvince(province);
+        try{
+            tourRepo.save(tour);
+        }catch (Exception e) {
+            throw new FailException("Can't update tour", 1020);
+        }
+
+        int i =0;
+        for (TourImage tourImage : tour.getTourImages()){
+            tourImage.setLink(tourEditRes.getTourImage().get(i));
+            try {
+                tourImageRepo.save(tourImage);
+            }catch (Exception e) {
+                throw new FailException("Can't update image tour", 1020);
+            }
+            i++;
+        };
+
     }
 }

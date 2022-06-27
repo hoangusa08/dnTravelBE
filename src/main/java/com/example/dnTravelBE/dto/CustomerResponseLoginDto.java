@@ -19,5 +19,6 @@ public class CustomerResponseLoginDto {
     private String role;
     private String username;
     private String email;
-
+    private String avatar;
+    private boolean isDelete;
 }

@@ -55,6 +55,12 @@ public class TourMapper {
         } else {
             tourDetailDto.setTotalStar(Double.valueOf(totalStar/totalReview));
         }
+        tourDetailDto.setSubDescription(tour.getSubDescription());
+//        Map<String, Object> category = new HashMap<>();
+//        Map<String, Object> startLocation = new HashMap<>();
+        tourDetailDto.setCategory(tour.getCategory());
+        tourDetailDto.setLocationStart(tour.getProvince());
+        tourDetailDto.setDateNumber(tour.getNumberDate());
         return tourDetailDto;
     }
 
@@ -74,5 +80,66 @@ public class TourMapper {
         tourListDto.setStatus(tour.getStatus().getName());
         tourListDto.setSubDescription(tour.getSubDescription());
         return tourListDto;
+    }
+
+    public static TourDetailDto toTourDetailDtoDetail(Tour tour) {
+        TourDetailDto tourDetailDto = new TourDetailDto();
+        tourDetailDto.setId(tour.getId());
+        tourDetailDto.setName(tour.getName());
+        tourDetailDto.setAdultPrice(tour.getAdultPrice());
+        tourDetailDto.setChildPrice(tour.getChildPrice());
+        tourDetailDto.setDescription(tour.getDescription());
+        List<String> tourImgs = new ArrayList<>();
+        for (TourImage tourImage: tour.getTourImages()){
+            tourImgs.add(tourImage.getLink());
+        }
+        tourDetailDto.setTourImage(tourImgs);
+        List<Object> schedules = new ArrayList<>();
+        LocalDate localDate = LocalDate.now();
+        localDate.plusDays(4);
+        for(Schedule schedule : tour.getSchedules()){
+            if( localDate.isBefore(schedule.getDate())){
+                Map<String, Object> objectMap = new HashMap<>();
+                objectMap.put("id", schedule.getId());
+                objectMap.put("date" , schedule.getDate());
+                schedules.add(objectMap);
+            }
+        }
+        tourDetailDto.setSchedules(schedules);
+        List<RateDto> rateDtos = new ArrayList<>();
+        int totalStar = 0;
+        int totalReview = 0;
+        for (RateTour rateTour : tour.getRateTours()){
+            if(!rateTour.isDelete()){
+                totalStar += rateTour.getStar();
+                ++totalReview;
+                RateDto rateDto = new RateDto();
+                rateDto.setId(rateDto.getId());
+                rateDto.setComment(rateTour.getComment());
+                rateDto.setAvatar_source("");
+                rateDto.setStar(rateTour.getStar());
+                rateDto.setCreate_at(rateTour.getCreate_at());
+                rateDto.setUser_full_name(rateTour.getCustomer().getFullName());
+                rateDtos.add(rateDto);
+            }
+        }
+        tourDetailDto.setRateTours(rateDtos);
+        if (totalReview == 0) {
+            tourDetailDto.setTotalStar(0.0);
+        } else {
+            tourDetailDto.setTotalStar(Double.valueOf(totalStar/totalReview));
+        }
+        tourDetailDto.setSubDescription(tour.getSubDescription());
+        Map<String, Object> category = new HashMap<>();
+        Map<String, Object> startLocation = new HashMap<>();
+        tourDetailDto.setCategory(tour.getCategory());
+        category.put("id", tour.getCategory().getId());
+        category.put("name", tour.getCategory().getName());
+        tourDetailDto.setCategory(category);
+        startLocation.put("id", tour.getProvince().getId());
+        startLocation.put("name", tour.getProvince().getName());
+        tourDetailDto.setLocationStart(startLocation);
+        tourDetailDto.setDateNumber(tour.getNumberDate());
+        return tourDetailDto;
     }
 }

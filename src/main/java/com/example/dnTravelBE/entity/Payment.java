@@ -33,6 +33,9 @@ public class Payment {
     @NotNull
     private Integer total;
 
+    @NotNull
+    private LocalDate createAt;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "schedule_id", nullable = false)
     private  Schedule schedule;

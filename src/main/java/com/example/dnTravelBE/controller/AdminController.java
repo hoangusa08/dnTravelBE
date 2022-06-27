@@ -2,6 +2,8 @@ package com.example.dnTravelBE.controller;
 
 import com.example.dnTravelBE.constant.StatusEnum;
 import com.example.dnTravelBE.dto.ResponseDto;
+import com.example.dnTravelBE.service.AdminService;
+import com.example.dnTravelBE.service.CustomerService;
 import com.example.dnTravelBE.service.ProviderService;
 import com.example.dnTravelBE.service.TourService;
 import lombok.AllArgsConstructor;
@@ -18,6 +20,8 @@ public class AdminController {
 
     private final ProviderService providerService;
     private final TourService tourService;
+    private final AdminService adminService;
+    private final CustomerService customerService;
 
     @GetMapping("provider/{status}")
     private ResponseEntity<Object> getProvidersAccept(@RequestParam(defaultValue = "0") @Min(0) Integer page,
@@ -75,5 +79,29 @@ public class AdminController {
     private ResponseEntity<Object> acceptTour(@PathVariable Integer id) {
         tourService.changeStatusTour(id, StatusEnum.ACCEPT);
         return ResponseEntity.ok(ResponseDto.responseWithoutData());
+    }
+    @GetMapping("dasboard/total")
+    private ResponseEntity<Object> getTotal(){
+        return adminService.getTotalDashboard();
+    }
+
+    @GetMapping("dasboard/chart-user")
+    private ResponseEntity<Object> getChartUser(){
+        return adminService.getChartUserDashboard();
+    }
+    @GetMapping("dasboard/chart-payment")
+    private ResponseEntity<Object> getChartPayment(){
+        return adminService.getChatPaymentDashboard();
+    }
+    @PostMapping("/delete/rate-tour/{id}")
+    private ResponseEntity<Object> deleteRate(@PathVariable("id") Integer id){
+        adminService.deleteComment(id);
+        return ResponseEntity.ok(ResponseDto.responseWithoutData());
+    }
+
+    @GetMapping("/customers")
+    private ResponseEntity<Object> getListCustomer( @RequestParam(defaultValue = "0") @Min(0) Integer page,
+                                                    @RequestParam(defaultValue = "") String keyword){
+        return customerService.getAllCustomer(page, keyword);
     }
 }
