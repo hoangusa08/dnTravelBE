@@ -33,4 +33,4 @@ INSERT INTO account (email, password, username ,role_id, create_at) VALUES ('hoa
 
 INSERT INTO admin (account_id) VALUES (1);
 INSERT INTO provider (account_id, address, bank_id, bank_number, name_company, owner, phone_number, status_id) VALUES (2 ,'abc', 1, '123456789' ,'abc' , 'abc', '12222', 1 );
-INSERT INTO customer (address, full_name, phone_number, account_id, is_delete) VALUES ('abc', 'abc' ,'abc', 3, false);
+INSERT INTO customer (address, full_name, phone_number, account_id, is_delete) VALUES ('abc', 'abc' ,'0123456789', 3, false);
