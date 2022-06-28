@@ -52,7 +52,6 @@ public class PaymentServiceImpl implements PaymentService {
             PaymentsDto paymentsDto = PaymentMapper.toPaymentsDto(payment);
             paymentsDtos.add(paymentsDto);
         }
-
         return paymentsDtos;
     }
 

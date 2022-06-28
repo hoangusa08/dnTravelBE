@@ -22,7 +22,7 @@ public interface PaymentRepo extends JpaRepository<Payment, Integer> {
     Optional<Payment> findById (Integer id);
 
     @Query(value = "select sum(total)  from payment where status =?1", nativeQuery = true)
-    int countAllByStatus( String status);
+    Integer countAllByStatus( String status);
 
 
     @Query(value = "SELECT * FROM payment WHERE status = ?1 and create_at BETWEEN ?2 AND ?3 ", nativeQuery = true)

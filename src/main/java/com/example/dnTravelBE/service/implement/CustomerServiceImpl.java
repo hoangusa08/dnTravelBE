@@ -43,6 +43,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    @Transactional
     public void createCustomer(RegisterCustomerDto registerCustomerDto, Account newAccountCustomer) {
         try {
             Customer customer = new Customer();

@@ -2,10 +2,7 @@ package com.example.dnTravelBE.controller;
 
 import com.example.dnTravelBE.constant.StatusEnum;
 import com.example.dnTravelBE.dto.ResponseDto;
-import com.example.dnTravelBE.service.AdminService;
-import com.example.dnTravelBE.service.CustomerService;
-import com.example.dnTravelBE.service.ProviderService;
-import com.example.dnTravelBE.service.TourService;
+import com.example.dnTravelBE.service.*;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +19,7 @@ public class AdminController {
     private final TourService tourService;
     private final AdminService adminService;
     private final CustomerService customerService;
+    private final AccountService accountService;
 
     @GetMapping("provider/{status}")
     private ResponseEntity<Object> getProvidersAccept(@RequestParam(defaultValue = "0") @Min(0) Integer page,
@@ -103,5 +101,11 @@ public class AdminController {
     private ResponseEntity<Object> getListCustomer( @RequestParam(defaultValue = "0") @Min(0) Integer page,
                                                     @RequestParam(defaultValue = "") String keyword){
         return customerService.getAllCustomer(page, keyword);
+    }
+
+    @PutMapping("/customer/{id}")
+    private ResponseEntity<Object> deleteCustomer( @PathVariable Integer id) {
+        accountService.deleteCustomer(id);
+        return ResponseEntity.ok(ResponseDto.responseWithoutData());
     }
 }

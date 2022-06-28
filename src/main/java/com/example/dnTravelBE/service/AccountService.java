@@ -16,4 +16,6 @@ public interface AccountService {
     AccountRole getRoleOfUser (String email);
 
     void updatePasswordCustomer (ChangePassReq changePassReq ,Integer id);
+
+    void deleteCustomer( Integer customerId);
 }

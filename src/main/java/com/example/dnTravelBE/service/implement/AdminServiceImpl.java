@@ -114,11 +114,16 @@ public class AdminServiceImpl implements AdminService {
         int totalCustomer = accountRepository.countAllByRoleName(AccountRole.ROLE_CUSTOMER);
         int totalProvider = accountRepository.countAllByRoleName(AccountRole.ROLE_PROVIDER);
         int totalTour = tourRepo.countAllByAdmin(status.getId(), test);
-        int totalSale = paymentRepo.countAllByStatus("COMPLETE");
+        Integer totalSale = paymentRepo.countAllByStatus("COMPLETE");
         objectMap.put("totalCustomer", totalCustomer);
         objectMap.put("totalProvider", totalProvider);
         objectMap.put("totalTour", totalTour);
-        objectMap.put("totalSale", Double.valueOf(totalSale * 0.25));
+        if (totalSale != null) {
+            objectMap.put("totalSale", Double.valueOf(totalSale * 0.25));
+        }else {
+            objectMap.put("totalSale", 0.0);
+        }
+
         return ResponseEntity.ok(ResponseDto.response(objectMap));
     }
 

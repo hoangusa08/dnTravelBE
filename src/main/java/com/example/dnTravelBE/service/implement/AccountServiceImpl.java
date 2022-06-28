@@ -80,11 +80,12 @@ public class AccountServiceImpl implements AccountService {
             }
 
         } else {
-            throw new FailException("Account is allready existed.", 1000);
+            throw new FailException("Account is already existed.", 1000);
         }
     }
 
     @Override
+    @Transactional
     public AccountRole getRoleOfUser(String email) {
         Optional<Account> account = accountRepository.findByEmail(email);
         return account.get().getRole().getName();
@@ -101,6 +102,18 @@ public class AccountServiceImpl implements AccountService {
             accountRepository.save(account);
         } else {
             throw new FailException("Password incorrect.", 1111);
+        }
+    }
+
+    @Override
+    public void deleteCustomer(Integer customerId) {
+        Customer customer = customerRepository.findById(customerId).
+                orElseThrow(() -> new NotFoundException("Customer not found", 1054));
+        customer.setDelete(true);
+        try {
+            customerRepository.save(customer);
+        } catch (Exception e) {
+            throw new FailException("Can't delete customer", 1059);
         }
     }
 }
