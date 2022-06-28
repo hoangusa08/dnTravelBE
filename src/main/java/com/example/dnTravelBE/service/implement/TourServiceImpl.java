@@ -8,6 +8,7 @@ import com.example.dnTravelBE.exception.NotFoundException;
 import com.example.dnTravelBE.mapper.TourMapper;
 import com.example.dnTravelBE.repository.*;
 import com.example.dnTravelBE.request.RateTourReq;
+import com.example.dnTravelBE.request.SearchHome;
 import com.example.dnTravelBE.request.TourEditRes;
 import com.example.dnTravelBE.service.TourService;
 import io.jsonwebtoken.impl.crypto.MacProvider;
@@ -387,5 +388,34 @@ public class TourServiceImpl implements TourService {
             i++;
         };
 
+    }
+
+    @Override
+    public ResponseTourListDto searchHome(SearchHome searchHome) {
+        List<Schedule> schedules = scheduleRepo.findAllByDate(searchHome.getDate());
+        ResponseTourListDto responseTourListDto = new ResponseTourListDto();
+        List<TourListDto> resTours1 = new ArrayList<>();
+        for (Schedule schedule : schedules){
+            if (schedule.getTour().getProvince().getId() == searchHome.getProvinceId()){
+                int totalStar = 0;
+                int totalReview = 0;
+                for (RateTour rateTour : schedule.getTour().getRateTours()) {
+                    totalStar += rateTour.getStar();
+                    ++totalReview;
+                }
+                TourListDto tourListDto = new TourListDto();
+                if (totalReview != 0) {
+                    tourListDto = TourMapper.mapToTourListDto(schedule.getTour(), Double.valueOf(totalStar / totalReview));
+                } else {
+                    tourListDto = TourMapper.mapToTourListDto(schedule.getTour(), Double.valueOf(0));
+                }
+
+                resTours1.add(tourListDto);
+            }
+        }
+
+        responseTourListDto.setPage(0);
+        responseTourListDto.setTotal(1);
+        return responseTourListDto;
     }
 }

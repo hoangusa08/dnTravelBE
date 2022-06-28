@@ -2,12 +2,14 @@ package com.example.dnTravelBE.controller;
 
 import com.example.dnTravelBE.constant.StatusEnum;
 import com.example.dnTravelBE.dto.ResponseDto;
+import com.example.dnTravelBE.request.SearchHome;
 import com.example.dnTravelBE.service.TourService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.Min;
+import java.time.LocalDate;
 
 @RequestMapping("/tour")
 @RestController
@@ -53,5 +55,11 @@ public class TourController {
     @GetMapping("/province/{id}")
     public ResponseEntity<Object> getToursByProvince(@PathVariable("id") Integer id) {
         return ResponseEntity.ok(ResponseDto.response(tourService.getAllTourByProvince(id)));
+    }
+
+    @PostMapping("/home")
+    public ResponseEntity<Object> searchDashboard(@RequestBody SearchHome searchHome){
+
+        return ResponseEntity.ok(ResponseDto.response(tourService.searchHome(searchHome)));
     }
 }

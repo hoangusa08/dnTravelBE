@@ -4,6 +4,7 @@ import com.example.dnTravelBE.constant.StatusEnum;
 import com.example.dnTravelBE.dto.*;
 import com.example.dnTravelBE.entity.Tour;
 import com.example.dnTravelBE.request.RateTourReq;
+import com.example.dnTravelBE.request.SearchHome;
 import com.example.dnTravelBE.request.TourEditRes;
 import io.swagger.models.auth.In;
 import org.springframework.http.ResponseEntity;
@@ -39,5 +40,7 @@ public interface TourService {
     ResponseTourListDto getAllTourByProvince(Integer provinceId);
 
     void editTour(Integer tourId, TourEditRes tourEditRes);
+
+    ResponseTourListDto searchHome(SearchHome searchHome);
 
 }

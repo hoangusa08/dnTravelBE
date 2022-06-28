@@ -1,9 +1,6 @@
 package com.example.dnTravelBE.repository;
 
-import com.example.dnTravelBE.entity.Category;
-import com.example.dnTravelBE.entity.Province;
-import com.example.dnTravelBE.entity.Status;
-import com.example.dnTravelBE.entity.Tour;
+import com.example.dnTravelBE.entity.*;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -50,4 +47,5 @@ public interface TourRepo extends JpaRepository<Tour, Integer> {
 
     @Query(value = "select * from tour where start_location=?1 and is_delete = ?2  and status_id=?3", nativeQuery = true)
     List<Tour> findAllByProvinceIdAnAndStatusIdAndDelete(Integer provinceId, boolean delete, Integer statusId);
+
 }
