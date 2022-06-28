@@ -52,6 +52,8 @@ public class CustomerServiceImpl implements CustomerService {
             customer.setPhoneNumber(registerCustomerDto.getPhoneNumber());
             customer.setDelete(false);
             customerRepository.save(customer);
+
+            System.out.println("adb");
         } catch (Exception e) {
             throw new FailException("Cann't create customer", 2002);
         }

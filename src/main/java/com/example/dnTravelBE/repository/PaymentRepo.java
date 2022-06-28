@@ -21,7 +21,7 @@ public interface PaymentRepo extends JpaRepository<Payment, Integer> {
 
     Optional<Payment> findById (Integer id);
 
-    @Query(value = "select count(*) total from payment where status =?1", nativeQuery = true)
+    @Query(value = "select sum(total)  from payment where status =?1", nativeQuery = true)
     int countAllByStatus( String status);
 
 

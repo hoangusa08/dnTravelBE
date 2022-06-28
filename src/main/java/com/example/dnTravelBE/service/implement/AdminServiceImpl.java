@@ -141,58 +141,58 @@ public class AdminServiceImpl implements AdminService {
         LocalDate start = LocalDate.of(2022, 1, 1);
         LocalDate end = LocalDate.of(2022, 12, 31);
         List<Payment> payments = paymentRepo.findAllByStatusAndDAndCreateAt("COMPLETE", start, end);
-        List<Integer> acc = new ArrayList<>();
+        List<Double> acc = new ArrayList<>();
         for (int i = 0; i < 12; i++) {
-            acc.add(0);
+            acc.add(0.0);
         }
         for (Payment payment : payments) {
             switch (payment.getCreateAt().getMonth().getValue()) {
                 case 1: {
-                    acc.set(0, acc.get(0) + 1);
+                    acc.set(0, acc.get(0) + Double.valueOf(payment.getTotal()/4));
                     break;
                 }
                 case 2: {
-                    acc.set(1, acc.get(1) + 1);
+                    acc.set(1, acc.get(1) +  Double.valueOf(payment.getTotal()/4));
                     break;
                 }
                 case 3: {
-                    acc.set(2, acc.get(2) + 1);
+                    acc.set(2, acc.get(2) +  Double.valueOf(payment.getTotal()/4));
                     break;
                 }
                 case 4: {
-                    acc.set(3, acc.get(3) + 1);
+                    acc.set(3, acc.get(3) +  Double.valueOf(payment.getTotal()/4));
                     break;
                 }
                 case 5: {
-                    acc.set(4, acc.get(4) + 1);
+                    acc.set(4, acc.get(4) +  Double.valueOf(payment.getTotal()/4));
                     break;
                 }
                 case 6: {
-                    acc.set(5, acc.get(5) + 1);
+                    acc.set(5, acc.get(5) +  Double.valueOf(payment.getTotal()/4));
                     break;
                 }
                 case 7: {
-                    acc.set(6, acc.get(6) + 1);
+                    acc.set(6, acc.get(6) +  Double.valueOf(payment.getTotal()/4));
                     break;
                 }
                 case 8: {
-                    acc.set(7, acc.get(7) + 1);
+                    acc.set(7, acc.get(7) +  Double.valueOf(payment.getTotal()/4));
                     break;
                 }
                 case 9: {
-                    acc.set(8, acc.get(8) + 1);
+                    acc.set(8, acc.get(8) +  Double.valueOf(payment.getTotal()/4));
                     break;
                 }
                 case 10: {
-                    acc.set(9, acc.get(9) + 1);
+                    acc.set(9, acc.get(9) +  Double.valueOf(payment.getTotal()/4));
                     break;
                 }
                 case 11: {
-                    acc.set(10, acc.get(10) + 1);
+                    acc.set(10, acc.get(10) +  Double.valueOf(payment.getTotal()/4));
                     break;
                 }
                 case 12: {
-                    acc.set(11, acc.get(11) + 1);
+                    acc.set(11, acc.get(11) +  Double.valueOf(payment.getTotal()/4));
                     break;
                 }
                 default: {
