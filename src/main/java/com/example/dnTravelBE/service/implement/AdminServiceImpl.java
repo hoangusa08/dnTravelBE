@@ -128,9 +128,9 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public ResponseEntity getChartUserDashboard() {
-        LocalDate start = LocalDate.of(2022, 1, 1);
-        LocalDate end = LocalDate.of(2022, 12, 31);
+    public ResponseEntity getChartUserDashboard( int year) {
+        LocalDate start = LocalDate.of(year, 1, 1);
+        LocalDate end = LocalDate.of(year, 12, 31);
         Optional<Role> roleCus = roleRepository.findByName(AccountRole.ROLE_CUSTOMER);
         Optional<Role> roleProvider = roleRepository.findByName(AccountRole.ROLE_PROVIDER);
         Map<String, Object> responce = new HashMap<>();
@@ -142,9 +142,9 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public ResponseEntity getChatPaymentDashboard() {
-        LocalDate start = LocalDate.of(2022, 1, 1);
-        LocalDate end = LocalDate.of(2022, 12, 31);
+    public ResponseEntity getChatPaymentDashboard( int year) {
+        LocalDate start = LocalDate.of(year, 1, 1);
+        LocalDate end = LocalDate.of(year, 12, 31);
         List<Payment> payments = paymentRepo.findAllByStatusAndDAndCreateAt("COMPLETE", start, end);
         List<Double> acc = new ArrayList<>();
         for (int i = 0; i < 12; i++) {

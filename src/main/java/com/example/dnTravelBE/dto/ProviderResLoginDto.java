@@ -11,7 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ProviderResLoginDto {
 
-    private String nameConpany;
+    private String nameCompany;
     private String owner;
     private Integer id;
     private String phoneNumber;
@@ -19,5 +19,7 @@ public class ProviderResLoginDto {
     private String address;
     private String bankNumber;
     private String email;
+    private String username;
+    private Integer bankId;
 
 }

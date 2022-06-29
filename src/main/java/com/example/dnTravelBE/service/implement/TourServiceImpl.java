@@ -413,7 +413,7 @@ public class TourServiceImpl implements TourService {
                 resTours1.add(tourListDto);
             }
         }
-
+        responseTourListDto.setTours(resTours1);
         responseTourListDto.setPage(0);
         responseTourListDto.setTotal(1);
         return responseTourListDto;

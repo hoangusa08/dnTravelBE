@@ -83,13 +83,13 @@ public class AdminController {
         return adminService.getTotalDashboard();
     }
 
-    @GetMapping("dasboard/chart-user")
-    private ResponseEntity<Object> getChartUser(){
-        return adminService.getChartUserDashboard();
+    @GetMapping("dashboard/chart-user/{year}")
+    private ResponseEntity<Object> getChartUser( @PathVariable int year){
+        return adminService.getChartUserDashboard(year);
     }
-    @GetMapping("dasboard/chart-payment")
-    private ResponseEntity<Object> getChartPayment(){
-        return adminService.getChatPaymentDashboard();
+    @GetMapping("dashboard/chart-payment/{year}")
+    private ResponseEntity<Object> getChartPayment(@PathVariable int year){
+        return adminService.getChatPaymentDashboard(year);
     }
     @PostMapping("/delete/rate-tour/{id}")
     private ResponseEntity<Object> deleteRate(@PathVariable("id") Integer id){

@@ -8,9 +8,9 @@ public interface AdminService {
 
  ResponseEntity getTotalDashboard();
 
- ResponseEntity getChartUserDashboard();
+ ResponseEntity getChartUserDashboard( int year );
 
- ResponseEntity getChatPaymentDashboard();
+ ResponseEntity getChatPaymentDashboard( int year);
 
  void deleteComment(Integer id);
 }

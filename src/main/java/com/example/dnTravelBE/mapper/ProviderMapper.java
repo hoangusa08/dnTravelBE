@@ -12,9 +12,11 @@ public class ProviderMapper {
         providerResLoginDto.setBankNumber(provider.getBankNumber());
         providerResLoginDto.setPhoneNumber(provider.getPhoneNumber());
         providerResLoginDto.setOwner(provider.getOwner());
-        providerResLoginDto.setNameConpany(provider.getNameCompany());
+        providerResLoginDto.setNameCompany(provider.getNameCompany());
         providerResLoginDto.setEmail(provider.getAccount().getEmail());
         providerResLoginDto.setRole(provider.getAccount().getRole().getName().toString());
+        providerResLoginDto.setUsername(provider.getAccount().getUsername());
+        providerResLoginDto.setBankId(provider.getBank().getId());
         return providerResLoginDto;
     }
 }

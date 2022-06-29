@@ -24,9 +24,15 @@ public interface PaymentRepo extends JpaRepository<Payment, Integer> {
     @Query(value = "select sum(total)  from payment where status =?1", nativeQuery = true)
     Integer countAllByStatus( String status);
 
+    @Query(value = "select sum(total)  from payment where status =?1 and provider_id=?2", nativeQuery = true)
+    Integer countAllByStatusAndProvider( String status, Integer providerId);
+
 
     @Query(value = "SELECT * FROM payment WHERE status = ?1 and create_at BETWEEN ?2 AND ?3 ", nativeQuery = true)
     List<Payment> findAllByStatusAndDAndCreateAt(String  status, LocalDate start, LocalDate end);
+
+    @Query(value = "SELECT * FROM payment WHERE status = ?1 and create_at BETWEEN ?2 AND ?3 and provider_id=?4", nativeQuery = true)
+    List<Payment> findAllByStatusAndDAndCreateAtAndProvider(String  status, LocalDate start, LocalDate end, Integer providerId);
 
     @Query(value = "select product, sum(amount) \n" +
             "       from payment \n" +

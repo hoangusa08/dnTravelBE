@@ -5,8 +5,10 @@ import com.example.dnTravelBE.dto.PaymentsDto;
 import com.example.dnTravelBE.dto.ResponseDto;
 import com.example.dnTravelBE.dto.ResponseTourListDto;
 import com.example.dnTravelBE.dto.TourDto;
+import com.example.dnTravelBE.request.ProviderReq;
 import com.example.dnTravelBE.request.TourEditRes;
 import com.example.dnTravelBE.service.PaymentService;
+import com.example.dnTravelBE.service.ProviderService;
 import com.example.dnTravelBE.service.TourService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +24,7 @@ import java.util.List;
 public class ProviderController {
 
     private final TourService tourService;
-
+    private final ProviderService providerService;
     private final PaymentService paymentService;
 
     @GetMapping("tours/{id}/{status}")
@@ -81,6 +83,27 @@ public class ProviderController {
     private ResponseEntity<Object> editTour(@PathVariable("id") Integer id,
                                             @RequestBody TourEditRes tourEditRes){
         tourService.editTour(id, tourEditRes);
+        return ResponseEntity.ok(ResponseDto.responseWithoutData());
+    }
+
+    @GetMapping("dashboard/{providerId}")
+    private ResponseEntity<Object> totalDashboard(@PathVariable("providerId") Integer providerId ){
+        return providerService.getTotalDashboard(providerId);
+    }
+
+    @GetMapping("dashboard/chart/{providerId}/{year}")
+    private ResponseEntity<Object> chartDashboard(@PathVariable("providerId") Integer providerId, @PathVariable("year") int year ){
+        return providerService.getChatPaymentDashboard(providerId, year);
+    }
+
+    @GetMapping("detail/{id}")
+    private ResponseEntity<Object> getProviderDetail(@PathVariable Integer id) {
+        return ResponseEntity.ok(ResponseDto.response(providerService.getDetail(id)));
+    }
+
+    @PutMapping("/edit-detail")
+    private ResponseEntity<Object> editProvider(@RequestBody ProviderReq providerReq){
+        providerService.editProvider(providerReq);
         return ResponseEntity.ok(ResponseDto.responseWithoutData());
     }
 }
