@@ -5,11 +5,9 @@ import com.example.dnTravelBE.entity.Category;
 import com.example.dnTravelBE.service.CategoryService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.Min;
 import java.util.List;
 import java.util.Map;
 
@@ -26,5 +24,24 @@ public class CategoryController {
         List<Object> categories = categoryService.getCategories();
         Map<String, Object> response = ResponseDto.response(categories);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/admin")
+    public ResponseEntity<Object> getByAdmin(@RequestParam(defaultValue = "0") @Min(0) Integer page,
+                                             @RequestParam(defaultValue = "") String keyword){
+        return categoryService.getByAdmin(page, keyword);
+    }
+
+    @PostMapping("/admin/{name}")
+    public ResponseEntity<Object> careteCate(@PathVariable String name) {
+        categoryService.createCate(name);
+        return ResponseEntity.ok(ResponseDto.responseWithoutData());
+    }
+
+    @PutMapping ("/admin/{id}/{name}")
+    public ResponseEntity<Object> editCate(@PathVariable("name") String name,
+                                           @PathVariable("id") Integer id) {
+        categoryService.editCate(id, name);
+        return ResponseEntity.ok(ResponseDto.responseWithoutData());
     }
 }

@@ -21,4 +21,5 @@ public class ProvinceController {
     public ResponseEntity<Object> getProvinces () {
         return ResponseEntity.ok(ResponseDto.response(provinceService.getProvinces()));
     }
+
 }
