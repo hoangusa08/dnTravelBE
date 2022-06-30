@@ -43,7 +43,7 @@ public class CustomerController {
 
     @GetMapping("/list-book-tour/{customerId}/{status}")
     public ResponseEntity<Object> getListBookTour(@PathVariable("status") String status, @PathVariable("customerId") Integer customerId) {
-        List<PaymentsDto> paymentsDtos = paymentService.getAllTourCusTomerByStatus( status, customerId);
+        List<PaymentsDto> paymentsDtos = paymentService.getAllTourCusTomerByStatus(status, customerId);
         return ResponseEntity.ok(ResponseDto.response(paymentsDtos));
     }
 
@@ -63,9 +63,18 @@ public class CustomerController {
         return ResponseEntity.ok(ResponseDto.responseWithoutData());
     }
 
-    @PutMapping("rate-tour")
-    public ResponseEntity<Object> EditRateTour() {
-        return null;
+    @PutMapping("rate-tour/{id}")
+    public ResponseEntity<Object> EditRateTour(@RequestBody RateTourReq rateTourReq,
+                                               @PathVariable Integer id) {
+        tourService.editRateTour(id, rateTourReq);
+        return ResponseEntity.ok(ResponseDto.responseWithoutData());
+    }
+
+    @DeleteMapping("rate-tour/{id}")
+    public ResponseEntity<Object> DeleteRateTour(
+            @PathVariable Integer id) {
+        tourService.deleteRateTour(id);
+        return ResponseEntity.ok(ResponseDto.responseWithoutData());
     }
 
     @GetMapping("rate-tour/{customerId}/{tourId}")
@@ -87,9 +96,10 @@ public class CustomerController {
 
     @GetMapping("/tour/rate-tour/{tourId}/{customerId}")
     public ResponseEntity<Object> getRayeTourByCustomerId(@PathVariable("tourId") Integer tourId,
-                                                          @PathVariable("customerId") Integer customerId){
+                                                          @PathVariable("customerId") Integer customerId) {
         RateTourDetail rateTourDetail = tourService.getRateTourDetailById(tourId, customerId);
         return ResponseEntity.ok(ResponseDto.response(rateTourDetail));
     }
+
 
 }

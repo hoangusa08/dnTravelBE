@@ -25,5 +25,6 @@ public class PaymentsDto {
     private Integer adultNumber;
     private Integer childrenNumber;
     private LocalDate schedule;
+    private String image;
 
 }

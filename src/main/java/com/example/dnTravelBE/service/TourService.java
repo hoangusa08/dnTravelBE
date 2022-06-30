@@ -23,6 +23,10 @@ public interface TourService {
 
     void createRateTour(RateTourReq rateTourReq);
 
+    void editRateTour( Integer id, RateTourReq rateTourReq);
+
+    void deleteRateTour( Integer id);
+
     void changeStatusTour(Integer tourId, StatusEnum statusEnum);
 
     void setStatusTour(Integer id, boolean status);

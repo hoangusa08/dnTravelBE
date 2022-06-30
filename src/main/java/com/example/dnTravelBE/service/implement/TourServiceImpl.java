@@ -161,6 +161,12 @@ public class TourServiceImpl implements TourService {
                 orElseThrow(() -> new NotFoundException("Not Found Customer.", 1015));
         Tour tour = tourRepo.findById(rateTourReq.getTourId()).
                 orElseThrow(() -> new NotFoundException("Not Found Tour.", 1016));
+        Optional<RateTour> rateTourOld = rateTourRepo.findByTourIdAndCustomerId(tour.getId(), customer.getId());
+        if(!rateTourOld.isEmpty()) {
+            rateTourOld.get().setDelete(false);
+            rateTourOld.get().setStar(rateTourReq.getStar());
+            rateTourOld.get().setComment(rateTourReq.getComment());
+        }
         RateTour rateTour = new RateTour();
         rateTour.setTour(tour);
         rateTour.setCreate_at(LocalDate.now());
@@ -169,9 +175,38 @@ public class TourServiceImpl implements TourService {
         rateTour.setCustomer(customer);
         rateTour.setDelete(false);
         try {
-            rateTourRepo.save(rateTour);
+            if(!rateTourOld.isEmpty()){
+                rateTourRepo.save(rateTourOld.get());
+            } else {
+                rateTourRepo.save(rateTour);
+            }
         } catch (Exception e) {
             throw new FailException("Can't create an rate tour", 1020);
+        }
+    }
+
+    @Override
+    public void editRateTour(Integer id, RateTourReq rateTourReq) {
+        RateTour rateTour = rateTourRepo.findById(id).
+                orElseThrow(() -> new NotFoundException("Not Found Rate Tour.", 1096));
+        rateTour.setStar(rateTourReq.getStar());
+        rateTour.setComment(rateTourReq.getComment());
+        try {
+            rateTourRepo.save(rateTour);
+        }catch (Exception e) {
+            throw new FailException("Can't update rate tour", 1020);
+        }
+    }
+
+    @Override
+    public void deleteRateTour(Integer id) {
+        RateTour rateTour = rateTourRepo.findById(id).
+                orElseThrow(() -> new NotFoundException("Not Found Rate Tour.", 1097));
+        rateTour.setDelete(true);
+        try {
+            rateTourRepo.save(rateTour);
+        }catch (Exception e) {
+            throw new FailException("Can't delete rate tour", 1020);
         }
     }
 
@@ -226,13 +261,14 @@ public class TourServiceImpl implements TourService {
     public RateTourDetail getRateTourDetailById(Integer tourId, Integer customerId) {
         Optional<RateTour> rateTour = rateTourRepo.findByTourIdAndCustomerId(tourId, customerId);
         RateTourDetail rateTourDetail = new RateTourDetail();
-        System.out.println(rateTour.get().getStar());
-        if (!rateTour.isEmpty()) {
+        if (!rateTour.isEmpty() && !rateTour.get().isDelete()) {
             rateTourDetail.setId(rateTour.get().getId());
             rateTourDetail.setTourName(rateTour.get().getTour().getName());
             rateTourDetail.setComment(rateTour.get().getComment());
             rateTourDetail.setStar(rateTour.get().getStar());
             rateTourDetail.setCreate_at(rateTour.get().getCreate_at());
+        } else {
+            throw new FailException("Rate tour is delete", 1020);
         }
         return rateTourDetail;
     }
