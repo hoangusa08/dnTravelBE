@@ -395,22 +395,23 @@ public class TourServiceImpl implements TourService {
         System.out.println(tourEditRes.getCategoryId());
         Category category = categoryRepo.findById(tourEditRes.getCategoryId())
                 .orElseThrow(() -> new NotFoundException("Not Found category.", 1020));
-
         Province province = provinceRepo.findById(tourEditRes.getProvinceId())
                 .orElseThrow(() -> new NotFoundException("Not Found province.", 1021));
-
+        Status status = statusRepository.findByName(StatusEnum.WAITING)
+                 .orElseThrow(() -> new NotFoundException("Not Found status.", 1022));
         tour.setName(tourEditRes.getName());
         tour.setAdultPrice(tourEditRes.getAdultPrice());
         tour.setChildPrice(tourEditRes.getChildPrice());
         tour.setDescription(tourEditRes.getDescription());
         tour.setNumberDate(tourEditRes.getDateNumber());
         tour.setSubDescription(tourEditRes.getSubDescription());
+        tour.setStatus(status);
         tour.setCategory(category);
         tour.setProvince(province);
         try{
             tourRepo.save(tour);
         }catch (Exception e) {
-            throw new FailException("Can't update tour", 1020);
+            throw new FailException("Can't update tour", 1023);
         }
 
         int i =0;
@@ -419,7 +420,7 @@ public class TourServiceImpl implements TourService {
             try {
                 tourImageRepo.save(tourImage);
             }catch (Exception e) {
-                throw new FailException("Can't update image tour", 1020);
+                throw new FailException("Can't update image tour", 1024);
             }
             i++;
         };
