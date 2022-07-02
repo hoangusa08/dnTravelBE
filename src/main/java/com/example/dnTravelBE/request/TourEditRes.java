@@ -20,5 +20,5 @@ public class TourEditRes {
     private String subDescription;
     private Integer categoryId;
     private Integer provinceId;
-
+    private Integer numberPeople;
 }

@@ -41,6 +41,9 @@ public class Tour {
     private boolean isDelete;
 
     @NotNull
+    private Integer numberPeople;
+
+    @NotNull
     private String subDescription;
 
     @OneToMany(mappedBy = "tour", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)

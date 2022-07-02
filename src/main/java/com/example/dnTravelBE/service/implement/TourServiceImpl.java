@@ -6,12 +6,13 @@ import com.example.dnTravelBE.entity.*;
 import com.example.dnTravelBE.exception.FailException;
 import com.example.dnTravelBE.exception.NotFoundException;
 import com.example.dnTravelBE.mapper.TourMapper;
+import com.example.dnTravelBE.mapper.temple.CurrentPeople;
 import com.example.dnTravelBE.repository.*;
 import com.example.dnTravelBE.request.RateTourReq;
 import com.example.dnTravelBE.request.SearchHome;
+import com.example.dnTravelBE.request.TourDetailReq;
 import com.example.dnTravelBE.request.TourEditRes;
 import com.example.dnTravelBE.service.TourService;
-import io.jsonwebtoken.impl.crypto.MacProvider;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -37,6 +38,8 @@ public class TourServiceImpl implements TourService {
     private final RateTourRepo rateTourRepo;
     private final CustomerRepository customerRepository;
 
+    private final PaymentRepo paymentRepo;
+
     private static int sizePage = 5;
 
     public int totalTourPages(int count) {
@@ -50,32 +53,33 @@ public class TourServiceImpl implements TourService {
     }
 
     @Override
-    public boolean createTour(TourDto tourDto) {
-        Provider provider = providerRepository.findById(tourDto.getProviderId()).
+    public boolean createTour(TourDetailReq tourDetailReq) {
+        Provider provider = providerRepository.findById(tourDetailReq.getProviderId()).
                 orElseThrow(() -> new NotFoundException("Not Found provider.", 1005));
-        Province province = provinceRepo.findById(tourDto.getProvinceId()).
+        Province province = provinceRepo.findById(tourDetailReq.getProvinceId()).
                 orElseThrow(() -> new NotFoundException("Not Found province.", 1006));
-        Category category = categoryRepo.findById(tourDto.getCategoryTd()).
+        Category category = categoryRepo.findById(tourDetailReq.getCategoryTd()).
                 orElseThrow(() -> new NotFoundException("Not Found category.", 1007));
         Status status = statusRepository.findByName(StatusEnum.WAITING).
                 orElseThrow(() -> new NotFoundException("Not Found status.", 1009));
         try {
             Tour tour = new Tour();
-            tour.setName(tourDto.getName());
-            tour.setAdultPrice(tourDto.getAdultPrice());
-            tour.setChildPrice(tourDto.getChildPrice());
-            tour.setDescription(tourDto.getDescription());
-            tour.setSubDescription(tourDto.getSubDescription());
+            tour.setName(tourDetailReq.getName());
+            tour.setAdultPrice(tourDetailReq.getAdultPrice());
+            tour.setChildPrice(tourDetailReq.getChildPrice());
+            tour.setDescription(tourDetailReq.getDescription());
+            tour.setSubDescription(tourDetailReq.getSubDescription());
             tour.setProvince(province);
             tour.setStatus(status);
             tour.setCategory(category);
             tour.setProvider(provider);
+            tour.setNumberPeople(tourDetailReq.getNumberPeople());
             tour.setDelete(false);
-            tour.setNumberDate(tourDto.getNumberDate());
+            tour.setNumberDate(tourDetailReq.getNumberDate());
             Tour newTour = tourRepo.save(tour);
-            for (int i = 0; i < tourDto.getTourImage().size(); i++) {
+            for (int i = 0; i < tourDetailReq.getTourImage().size(); i++) {
                 TourImage tourImage = new TourImage();
-                tourImage.setLink(tourDto.getTourImage().get(i));
+                tourImage.setLink(tourDetailReq.getTourImage().get(i));
                 tourImage.setTour(newTour);
                 if (i == 0) {
                     tourImage.setMain(true);
@@ -84,10 +88,10 @@ public class TourServiceImpl implements TourService {
                 }
                 tourImageRepo.save(tourImage);
             }
-            for (int i = 0; i < tourDto.getSchedules().size(); i++) {
+            for (int i = 0; i < tourDetailReq.getSchedules().size(); i++) {
                 Schedule schedule = new Schedule();
                 schedule.setTour(newTour);
-                schedule.setDate(tourDto.getSchedules().get(i));
+                schedule.setDate(tourDetailReq.getSchedules().get(i));
                 scheduleRepo.save(schedule);
             }
         } catch (Exception e) {
@@ -152,7 +156,26 @@ public class TourServiceImpl implements TourService {
     public TourDetailDto getTourDetailById(Integer id) {
         Tour tour = tourRepo.findById(id).
                 orElseThrow(() -> new NotFoundException("Not Found Tour.", 1014));
-        return TourMapper.toTourDetailDtoDetail(tour);
+        List<CurrentPeople> currentPeoples = new ArrayList<>();
+        for (Schedule schedule : tour.getSchedules()){
+            Integer currentPeople = paymentRepo.countByTourIdAndScheduleId(tour.getId(), schedule.getId());
+            CurrentPeople currentPeople1 = new CurrentPeople();
+            currentPeople1.setIdSchedule(schedule.getId());
+            if( currentPeople == null) {
+                currentPeople1.setCurrentPeople(0);
+            } else {
+                currentPeople1.setCurrentPeople(currentPeople);
+            }
+            currentPeoples.add(currentPeople1);
+        }
+        return TourMapper.toTourDetailDtoDetail(tour, currentPeoples);
+    }
+
+    @Override
+    public TourDetailDto getTourDetailByIdOfProvider(Integer id) {
+        Tour tour = tourRepo.findById(id).
+                orElseThrow(() -> new NotFoundException("Not Found Tour.", 1015));
+        return TourMapper.toTourDetailDtoProvider(tour);
     }
 
     @Override
@@ -408,6 +431,7 @@ public class TourServiceImpl implements TourService {
         tour.setStatus(status);
         tour.setCategory(category);
         tour.setProvince(province);
+        tour.setNumberPeople(tourEditRes.getNumberPeople());
         try{
             tourRepo.save(tour);
         }catch (Exception e) {

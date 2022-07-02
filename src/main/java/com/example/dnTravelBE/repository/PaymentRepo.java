@@ -1,6 +1,5 @@
 package com.example.dnTravelBE.repository;
 
-import com.example.dnTravelBE.entity.Account;
 import com.example.dnTravelBE.entity.Payment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -40,4 +39,8 @@ public interface PaymentRepo extends JpaRepository<Payment, Integer> {
             "       order by sum(amount) desc \n" +
             "       limit 6;", nativeQuery = true)
     List<Payment> getListTopPayment();
+
+
+    @Query(value = "select (sum(adult_number)+sum(children_number)) from payment where tour_id=?1 and schedule_id=?2 and status in ( 'WAITING', 'APPROVE')", nativeQuery = true)
+    Integer countByTourIdAndScheduleId(Integer tourId, Integer scheduleId);
 }

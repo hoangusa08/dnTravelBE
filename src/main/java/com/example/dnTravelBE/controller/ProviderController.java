@@ -4,7 +4,7 @@ import com.example.dnTravelBE.constant.StatusEnum;
 import com.example.dnTravelBE.dto.PaymentsDto;
 import com.example.dnTravelBE.dto.ResponseDto;
 import com.example.dnTravelBE.dto.ResponseTourListDto;
-import com.example.dnTravelBE.dto.TourDto;
+import com.example.dnTravelBE.request.TourDetailReq;
 import com.example.dnTravelBE.request.ProviderReq;
 import com.example.dnTravelBE.request.TourEditRes;
 import com.example.dnTravelBE.service.PaymentService;
@@ -45,8 +45,8 @@ public class ProviderController {
     }
 
     @PostMapping("createTour")
-    private ResponseEntity<Object> createTour(@RequestBody TourDto tourDto) {
-        boolean status = tourService.createTour(tourDto);
+    private ResponseEntity<Object> createTour(@RequestBody TourDetailReq tourDetailReq) {
+        boolean status = tourService.createTour(tourDetailReq);
         return ResponseEntity.ok(ResponseDto.responseWithoutData());
     }
 

@@ -5,21 +5,21 @@ import com.example.dnTravelBE.dto.*;
 import com.example.dnTravelBE.entity.Tour;
 import com.example.dnTravelBE.request.RateTourReq;
 import com.example.dnTravelBE.request.SearchHome;
+import com.example.dnTravelBE.request.TourDetailReq;
 import com.example.dnTravelBE.request.TourEditRes;
-import io.swagger.models.auth.In;
 import org.springframework.http.ResponseEntity;
-
-import java.util.List;
 
 public interface TourService {
 
-    boolean createTour(TourDto tourDto);
+    boolean createTour(TourDetailReq tourDetailReq);
 
     ResponseTourListDto getAllTour(StatusEnum statusEnum, Integer page, String keyword);
 
     ResponseTourListDto getAllTourProvider(Integer providerId, StatusEnum statusEnum, Integer page, String keyword, boolean isDelete);
 
     TourDetailDto getTourDetailById(Integer id);
+
+    TourDetailDto getTourDetailByIdOfProvider(Integer id);
 
     void createRateTour(RateTourReq rateTourReq);
 
