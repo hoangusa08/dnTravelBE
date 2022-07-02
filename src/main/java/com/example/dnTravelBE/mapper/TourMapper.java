@@ -7,14 +7,16 @@ import com.example.dnTravelBE.entity.RateTour;
 import com.example.dnTravelBE.entity.Schedule;
 import com.example.dnTravelBE.entity.Tour;
 import com.example.dnTravelBE.entity.TourImage;
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.example.dnTravelBE.mapper.temple.CurrentPeople;
+import lombok.AllArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.*;
 
+@AllArgsConstructor
 public class TourMapper {
 
-    public static TourDetailDto toTourDetailDto(Tour tour) {
+    public static TourDetailDto toTourDetailDtoProvider(Tour tour) {
         TourDetailDto tourDetailDto = new TourDetailDto();
         tourDetailDto.setId(tour.getId());
         tourDetailDto.setName(tour.getName());
@@ -56,11 +58,17 @@ public class TourMapper {
             tourDetailDto.setTotalStar(Double.valueOf(totalStar/totalReview));
         }
         tourDetailDto.setSubDescription(tour.getSubDescription());
-//        Map<String, Object> category = new HashMap<>();
-//        Map<String, Object> startLocation = new HashMap<>();
+        Map<String, Object> category = new HashMap<>();
+        Map<String, Object> startLocation = new HashMap<>();
         tourDetailDto.setCategory(tour.getCategory());
-        tourDetailDto.setLocationStart(tour.getProvince());
+        category.put("id", tour.getCategory().getId());
+        category.put("name", tour.getCategory().getName());
+        tourDetailDto.setCategory(category);
+        startLocation.put("id", tour.getProvince().getId());
+        startLocation.put("name", tour.getProvince().getName());
+        tourDetailDto.setLocationStart(startLocation);
         tourDetailDto.setDateNumber(tour.getNumberDate());
+        tourDetailDto.setNumberPeople(tour.getNumberPeople());
         return tourDetailDto;
     }
 
@@ -82,7 +90,7 @@ public class TourMapper {
         return tourListDto;
     }
 
-    public static TourDetailDto toTourDetailDtoDetail(Tour tour) {
+    public static TourDetailDto toTourDetailDtoDetail(Tour tour, List<CurrentPeople> currentPeoples) {
         TourDetailDto tourDetailDto = new TourDetailDto();
         tourDetailDto.setId(tour.getId());
         tourDetailDto.setName(tour.getName());
@@ -97,11 +105,17 @@ public class TourMapper {
         List<Object> schedules = new ArrayList<>();
         LocalDate localDate = LocalDate.now();
         localDate.plusDays(4);
+        int i = 0;
         for(Schedule schedule : tour.getSchedules()){
             if( localDate.isBefore(schedule.getDate())){
                 Map<String, Object> objectMap = new HashMap<>();
                 objectMap.put("id", schedule.getId());
                 objectMap.put("date" , schedule.getDate());
+                for (CurrentPeople currentPeople : currentPeoples){
+                    if(currentPeople.getIdSchedule() == schedule.getId()){
+                        objectMap.put("currentPeople", currentPeople.getCurrentPeople());
+                    }
+                }
                 schedules.add(objectMap);
             }
         }
@@ -140,6 +154,7 @@ public class TourMapper {
         startLocation.put("name", tour.getProvince().getName());
         tourDetailDto.setLocationStart(startLocation);
         tourDetailDto.setDateNumber(tour.getNumberDate());
+        tourDetailDto.setNumberPeople(tour.getNumberPeople());
         return tourDetailDto;
     }
 }

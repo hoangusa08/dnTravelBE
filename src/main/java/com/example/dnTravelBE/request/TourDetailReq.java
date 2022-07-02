@@ -1,4 +1,4 @@
-package com.example.dnTravelBE.dto;
+package com.example.dnTravelBE.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
@@ -8,15 +8,12 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class TourDto {
+public class TourDetailReq {
 
     private String name;
 
@@ -35,6 +32,8 @@ public class TourDto {
     private Integer categoryTd;
 
     private Integer numberDate;
+
+    private Integer numberPeople;
 
     @JsonFormat(pattern = "dd-MM-yyyy")
     private ArrayList<LocalDate> schedules;

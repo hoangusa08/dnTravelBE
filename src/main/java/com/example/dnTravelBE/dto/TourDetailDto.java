@@ -27,4 +27,5 @@ public class TourDetailDto {
     private Object locationStart;
     private String subDescription;
     private Integer dateNumber;
+    private Integer numberPeople;
 }
