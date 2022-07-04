@@ -12,6 +12,7 @@ import com.example.dnTravelBE.repository.AccountRepository;
 import com.example.dnTravelBE.repository.CustomerRepository;
 import com.example.dnTravelBE.repository.RoleRepository;
 import com.example.dnTravelBE.request.ChangePassReq;
+import com.example.dnTravelBE.request.EditAvatarCus;
 import com.example.dnTravelBE.service.AccountService;
 import com.example.dnTravelBE.service.CustomerService;
 import com.example.dnTravelBE.service.ProviderService;
@@ -115,5 +116,21 @@ public class AccountServiceImpl implements AccountService {
         } catch (Exception e) {
             throw new FailException("Can't delete customer", 1059);
         }
+    }
+
+    @Override
+    public String changeAvatarCustomer(EditAvatarCus editAvatarCus) {
+        Customer customer = customerRepository.findById(editAvatarCus.getCustomerId()).
+                orElseThrow(() -> new NotFoundException("Customer not found", 1060));
+        Account account = accountRepository.findById(customer.getAccount().getId()).
+                orElseThrow(() -> new NotFoundException("Account not found", 1061));
+
+        account.setAvatar(editAvatarCus.getLink());
+        try {
+            accountRepository.save(account);
+        }catch (Exception e) {
+            throw new FailException("Can't update avatar", 1059);
+        }
+        return account.getEmail();
     }
 }

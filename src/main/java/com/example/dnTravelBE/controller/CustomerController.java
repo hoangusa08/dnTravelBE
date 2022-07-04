@@ -5,6 +5,7 @@ import com.example.dnTravelBE.dto.PaymentsDto;
 import com.example.dnTravelBE.dto.RateTourDetail;
 import com.example.dnTravelBE.dto.ResponseDto;
 import com.example.dnTravelBE.request.ChangePassReq;
+import com.example.dnTravelBE.request.EditAvatarCus;
 import com.example.dnTravelBE.request.PaymentTourReq;
 import com.example.dnTravelBE.request.RateTourReq;
 import com.example.dnTravelBE.service.AccountService;
@@ -101,5 +102,9 @@ public class CustomerController {
         return ResponseEntity.ok(ResponseDto.response(rateTourDetail));
     }
 
-
+    @PutMapping("edit-avatar")
+    public ResponseEntity editAvatarCus(@RequestBody EditAvatarCus editAvatarCus){
+        String email = accountService.changeAvatarCustomer(editAvatarCus);
+        return ResponseEntity.ok(ResponseDto.response(customerService.getCustomerWhenLogin(email)));
+    }
 }
