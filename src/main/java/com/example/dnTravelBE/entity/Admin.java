@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Getter
@@ -22,4 +23,6 @@ public class Admin {
     @JoinColumn(name = "account_id")
     private Account account;
 
+    @NotNull
+    private Integer percent;
 }

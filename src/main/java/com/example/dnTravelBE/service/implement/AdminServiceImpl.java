@@ -114,12 +114,13 @@ public class AdminServiceImpl implements AdminService {
         int totalCustomer = accountRepository.countAllByRoleName(AccountRole.ROLE_CUSTOMER);
         int totalProvider = accountRepository.countAllByRoleName(AccountRole.ROLE_PROVIDER);
         int totalTour = tourRepo.countAllByAdmin(status.getId(), test);
+        Integer percent = adminRepository.percent();
         Integer totalSale = paymentRepo.countAllByStatus("COMPLETE");
         objectMap.put("totalCustomer", totalCustomer);
         objectMap.put("totalProvider", totalProvider);
         objectMap.put("totalTour", totalTour);
         if (totalSale != null) {
-            objectMap.put("totalSale", Double.valueOf(totalSale * 0.25));
+            objectMap.put("totalSale", Double.valueOf(totalSale * Double.valueOf(percent)/100.0));
         }else {
             objectMap.put("totalSale", 0.0);
         }
@@ -147,57 +148,58 @@ public class AdminServiceImpl implements AdminService {
         LocalDate end = LocalDate.of(year, 12, 31);
         List<Payment> payments = paymentRepo.findAllByStatusAndDAndCreateAt("COMPLETE", start, end);
         List<Double> acc = new ArrayList<>();
+        Integer percent = adminRepository.percent();
         for (int i = 0; i < 12; i++) {
             acc.add(0.0);
         }
         for (Payment payment : payments) {
             switch (payment.getCreateAt().getMonth().getValue()) {
                 case 1: {
-                    acc.set(0, acc.get(0) + Double.valueOf(payment.getTotal()/4));
+                    acc.set(0, acc.get(0) + Double.valueOf(payment.getTotal() *Double.valueOf(percent)/100.0));
                     break;
                 }
                 case 2: {
-                    acc.set(1, acc.get(1) +  Double.valueOf(payment.getTotal()/4));
+                    acc.set(1, acc.get(1) +  Double.valueOf(payment.getTotal() *Double.valueOf(percent)/100.0));
                     break;
                 }
                 case 3: {
-                    acc.set(2, acc.get(2) +  Double.valueOf(payment.getTotal()/4));
+                    acc.set(2, acc.get(2) +  Double.valueOf(payment.getTotal() *Double.valueOf(percent)/100.0));
                     break;
                 }
                 case 4: {
-                    acc.set(3, acc.get(3) +  Double.valueOf(payment.getTotal()/4));
+                    acc.set(3, acc.get(3) +  Double.valueOf(payment.getTotal() *Double.valueOf(percent)/100.0));
                     break;
                 }
                 case 5: {
-                    acc.set(4, acc.get(4) +  Double.valueOf(payment.getTotal()/4));
+                    acc.set(4, acc.get(4) +  Double.valueOf(payment.getTotal() *Double.valueOf(percent)/100.0));
                     break;
                 }
                 case 6: {
-                    acc.set(5, acc.get(5) +  Double.valueOf(payment.getTotal()/4));
+                    acc.set(5, acc.get(5) +  Double.valueOf(payment.getTotal() *Double.valueOf(percent)/100.0));
                     break;
                 }
                 case 7: {
-                    acc.set(6, acc.get(6) +  Double.valueOf(payment.getTotal()/4));
+                    acc.set(6, acc.get(6) +  Double.valueOf(payment.getTotal() *Double.valueOf(percent)/100.0));
                     break;
                 }
                 case 8: {
-                    acc.set(7, acc.get(7) +  Double.valueOf(payment.getTotal()/4));
+                    acc.set(7, acc.get(7) +  Double.valueOf(payment.getTotal() *Double.valueOf(percent)/100.0));
                     break;
                 }
                 case 9: {
-                    acc.set(8, acc.get(8) +  Double.valueOf(payment.getTotal()/4));
+                    acc.set(8, acc.get(8) +  Double.valueOf(payment.getTotal() *Double.valueOf(percent)/100.0));
                     break;
                 }
                 case 10: {
-                    acc.set(9, acc.get(9) +  Double.valueOf(payment.getTotal()/4));
+                    acc.set(9, acc.get(9) +  Double.valueOf(payment.getTotal() *Double.valueOf(percent)/100.0));
                     break;
                 }
                 case 11: {
-                    acc.set(10, acc.get(10) +  Double.valueOf(payment.getTotal()/4));
+                    acc.set(10, acc.get(10) +  Double.valueOf(payment.getTotal() *Double.valueOf(percent)/100.0));
                     break;
                 }
                 case 12: {
-                    acc.set(11, acc.get(11) +  Double.valueOf(payment.getTotal()/4));
+                    acc.set(11, acc.get(11) +  Double.valueOf(payment.getTotal() *Double.valueOf(percent)/100.0));
                     break;
                 }
                 default: {

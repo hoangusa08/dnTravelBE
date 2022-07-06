@@ -3,10 +3,7 @@ package com.example.dnTravelBE.service;
 import com.example.dnTravelBE.constant.StatusEnum;
 import com.example.dnTravelBE.dto.*;
 import com.example.dnTravelBE.entity.Tour;
-import com.example.dnTravelBE.request.RateTourReq;
-import com.example.dnTravelBE.request.SearchHome;
-import com.example.dnTravelBE.request.TourDetailReq;
-import com.example.dnTravelBE.request.TourEditRes;
+import com.example.dnTravelBE.request.*;
 import org.springframework.http.ResponseEntity;
 
 public interface TourService {
@@ -47,4 +44,7 @@ public interface TourService {
 
     ResponseTourListDto searchHome(SearchHome searchHome);
 
+    boolean isBookTour(CheckBookTour checkBookTour);
+
+    ResponseEntity<Object> topPayment();
 }

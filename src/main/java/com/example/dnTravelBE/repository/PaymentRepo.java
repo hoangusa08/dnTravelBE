@@ -33,14 +33,15 @@ public interface PaymentRepo extends JpaRepository<Payment, Integer> {
     @Query(value = "SELECT * FROM payment WHERE status = ?1 and create_at BETWEEN ?2 AND ?3 and provider_id=?4", nativeQuery = true)
     List<Payment> findAllByStatusAndDAndCreateAtAndProvider(String  status, LocalDate start, LocalDate end, Integer providerId);
 
-    @Query(value = "select product, sum(amount) \n" +
-            "       from payment \n" +
-            "       group by tour_id \n" +
-            "       order by sum(amount) desc \n" +
-            "       limit 6;", nativeQuery = true)
-    List<Payment> getListTopPayment();
+    @Query(value = "SELECT id, COUNT(*) AS cnt FROM payment\n" +
+            "GROUP BY tour_id\n" +
+            "ORDER BY cnt DESC LIMIT 6", nativeQuery = true)
+    List<Integer> getListTopPayment();
 
 
     @Query(value = "select (sum(adult_number)+sum(children_number)) from payment where tour_id=?1 and schedule_id=?2 and status in ( 'WAITING', 'APPROVE')", nativeQuery = true)
     Integer countByTourIdAndScheduleId(Integer tourId, Integer scheduleId);
+
+    @Query(value = "select * from payment where tour_id=?1 and customer_id=?2 and schedule_id=?3 and status != 'CUS_CANCEL'", nativeQuery = true)
+    Optional<Payment> findByTourIdAndCustomerIdAndScheduleId(Integer tourId, Integer customerId, Integer scheduleId);
 }

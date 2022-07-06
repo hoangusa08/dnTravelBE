@@ -2,6 +2,7 @@ package com.example.dnTravelBE.controller;
 
 import com.example.dnTravelBE.constant.StatusEnum;
 import com.example.dnTravelBE.dto.ResponseDto;
+import com.example.dnTravelBE.request.CheckBookTour;
 import com.example.dnTravelBE.request.SearchHome;
 import com.example.dnTravelBE.service.TourService;
 import lombok.AllArgsConstructor;
@@ -61,5 +62,15 @@ public class TourController {
     public ResponseEntity<Object> searchDashboard(@RequestBody SearchHome searchHome){
 
         return ResponseEntity.ok(ResponseDto.response(tourService.searchHome(searchHome)));
+    }
+
+    @PostMapping("check-payment")
+    public ResponseEntity<Object> checkPayment(@RequestBody CheckBookTour checkBookTour){
+        return ResponseEntity.ok(ResponseDto.response(tourService.isBookTour(checkBookTour)));
+    }
+
+    @GetMapping("top-payment")
+    public ResponseEntity<Object> topPayment(){
+        return tourService.topPayment();
     }
 }

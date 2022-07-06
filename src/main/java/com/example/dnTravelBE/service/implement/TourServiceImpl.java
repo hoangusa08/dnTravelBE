@@ -8,10 +8,7 @@ import com.example.dnTravelBE.exception.NotFoundException;
 import com.example.dnTravelBE.mapper.TourMapper;
 import com.example.dnTravelBE.mapper.temple.CurrentPeople;
 import com.example.dnTravelBE.repository.*;
-import com.example.dnTravelBE.request.RateTourReq;
-import com.example.dnTravelBE.request.SearchHome;
-import com.example.dnTravelBE.request.TourDetailReq;
-import com.example.dnTravelBE.request.TourEditRes;
+import com.example.dnTravelBE.request.*;
 import com.example.dnTravelBE.service.TourService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -478,5 +475,38 @@ public class TourServiceImpl implements TourService {
         responseTourListDto.setPage(0);
         responseTourListDto.setTotal(1);
         return responseTourListDto;
+    }
+
+    @Override
+    public boolean isBookTour(CheckBookTour checkBookTour) {
+        Optional<Payment> payment = paymentRepo.
+                findByTourIdAndCustomerIdAndScheduleId(checkBookTour.getTourId(),checkBookTour.getCustomerId(), checkBookTour.getScheduleId());
+        if (payment.isEmpty()){
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public ResponseEntity<Object> topPayment() {
+        List<Integer> paymentIds = paymentRepo.getListTopPayment();
+        List<TourListDto> tourListDtos = new ArrayList<>();
+        for (Integer id : paymentIds) {
+            Optional<Tour> tour = tourRepo.findById(id);
+            int totalStar = 0;
+            int totalReview = 0;
+            for (RateTour rateTour : tour.get().getRateTours()) {
+                totalStar += rateTour.getStar();
+                ++totalReview;
+            }
+            TourListDto tourListDto = new TourListDto();
+            if (totalReview != 0) {
+                tourListDto = TourMapper.mapToTourListDto(tour.get(), Double.valueOf(totalStar / totalReview));
+            } else {
+                tourListDto = TourMapper.mapToTourListDto(tour.get(), Double.valueOf(0));
+            }
+            tourListDtos.add(tourListDto);
+        }
+        return ResponseEntity.ok(ResponseDto.response(tourListDtos));
     }
 }

@@ -107,4 +107,6 @@ public class CustomerController {
         String email = accountService.changeAvatarCustomer(editAvatarCus);
         return ResponseEntity.ok(ResponseDto.response(customerService.getCustomerWhenLogin(email)));
     }
+
+
 }
