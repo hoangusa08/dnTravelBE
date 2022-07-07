@@ -47,4 +47,6 @@ public interface TourService {
     boolean isBookTour(CheckBookTour checkBookTour);
 
     ResponseEntity<Object> topPayment();
+
+    ResponseEntity<Object> tourNeedCompleteInMonth(Integer providerId);
 }

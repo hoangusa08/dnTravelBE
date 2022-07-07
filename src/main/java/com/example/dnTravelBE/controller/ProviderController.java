@@ -106,4 +106,9 @@ public class ProviderController {
         providerService.editProvider(providerReq);
         return ResponseEntity.ok(ResponseDto.responseWithoutData());
     }
+
+    @GetMapping("tour-need-complete/{providerId}")
+    private ResponseEntity<Object> tourNeedComplete( @PathVariable Integer providerId){
+        return tourService.tourNeedCompleteInMonth(providerId);
+    }
 }

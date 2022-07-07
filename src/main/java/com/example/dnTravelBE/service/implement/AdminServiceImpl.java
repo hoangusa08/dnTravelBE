@@ -115,7 +115,7 @@ public class AdminServiceImpl implements AdminService {
         int totalProvider = accountRepository.countAllByRoleName(AccountRole.ROLE_PROVIDER);
         int totalTour = tourRepo.countAllByAdmin(status.getId(), test);
         Integer percent = adminRepository.percent();
-        Integer totalSale = paymentRepo.countAllByStatus("COMPLETE");
+        Integer totalSale = paymentRepo.countAllByStatus();
         objectMap.put("totalCustomer", totalCustomer);
         objectMap.put("totalProvider", totalProvider);
         objectMap.put("totalTour", totalTour);
@@ -146,7 +146,7 @@ public class AdminServiceImpl implements AdminService {
     public ResponseEntity getChatPaymentDashboard( int year) {
         LocalDate start = LocalDate.of(year, 1, 1);
         LocalDate end = LocalDate.of(year, 12, 31);
-        List<Payment> payments = paymentRepo.findAllByStatusAndDAndCreateAt("COMPLETE", start, end);
+        List<Payment> payments = paymentRepo.findAllByStatusAndDAndCreateAt(start, end);
         List<Double> acc = new ArrayList<>();
         Integer percent = adminRepository.percent();
         for (int i = 0; i < 12; i++) {

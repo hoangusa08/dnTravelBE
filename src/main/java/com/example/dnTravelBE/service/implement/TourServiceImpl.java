@@ -154,11 +154,11 @@ public class TourServiceImpl implements TourService {
         Tour tour = tourRepo.findById(id).
                 orElseThrow(() -> new NotFoundException("Not Found Tour.", 1014));
         List<CurrentPeople> currentPeoples = new ArrayList<>();
-        for (Schedule schedule : tour.getSchedules()){
+        for (Schedule schedule : tour.getSchedules()) {
             Integer currentPeople = paymentRepo.countByTourIdAndScheduleId(tour.getId(), schedule.getId());
             CurrentPeople currentPeople1 = new CurrentPeople();
             currentPeople1.setIdSchedule(schedule.getId());
-            if( currentPeople == null) {
+            if (currentPeople == null) {
                 currentPeople1.setCurrentPeople(0);
             } else {
                 currentPeople1.setCurrentPeople(currentPeople);
@@ -182,7 +182,7 @@ public class TourServiceImpl implements TourService {
         Tour tour = tourRepo.findById(rateTourReq.getTourId()).
                 orElseThrow(() -> new NotFoundException("Not Found Tour.", 1016));
         Optional<RateTour> rateTourOld = rateTourRepo.findByTourIdAndCustomerId(tour.getId(), customer.getId());
-        if(!rateTourOld.isEmpty()) {
+        if (!rateTourOld.isEmpty()) {
             rateTourOld.get().setDelete(false);
             rateTourOld.get().setStar(rateTourReq.getStar());
             rateTourOld.get().setComment(rateTourReq.getComment());
@@ -195,7 +195,7 @@ public class TourServiceImpl implements TourService {
         rateTour.setCustomer(customer);
         rateTour.setDelete(false);
         try {
-            if(!rateTourOld.isEmpty()){
+            if (!rateTourOld.isEmpty()) {
                 rateTourRepo.save(rateTourOld.get());
             } else {
                 rateTourRepo.save(rateTour);
@@ -213,7 +213,7 @@ public class TourServiceImpl implements TourService {
         rateTour.setComment(rateTourReq.getComment());
         try {
             rateTourRepo.save(rateTour);
-        }catch (Exception e) {
+        } catch (Exception e) {
             throw new FailException("Can't update rate tour", 1020);
         }
     }
@@ -225,7 +225,7 @@ public class TourServiceImpl implements TourService {
         rateTour.setDelete(true);
         try {
             rateTourRepo.save(rateTour);
-        }catch (Exception e) {
+        } catch (Exception e) {
             throw new FailException("Can't delete rate tour", 1020);
         }
     }
@@ -342,10 +342,10 @@ public class TourServiceImpl implements TourService {
         }
 
         Map<String, Object> res = new HashMap<>();
-        res.put("start1" , province1.get());
-        res.put("start2" , province2.get());
-        res.put("tours1" , resTours1);
-        res.put("tours2" , resTours2);
+        res.put("start1", province1.get());
+        res.put("start2", province2.get());
+        res.put("tours1", resTours1);
+        res.put("tours2", resTours2);
         return ResponseEntity.ok(ResponseDto.response(res));
     }
 
@@ -418,7 +418,7 @@ public class TourServiceImpl implements TourService {
         Province province = provinceRepo.findById(tourEditRes.getProvinceId())
                 .orElseThrow(() -> new NotFoundException("Not Found province.", 1021));
         Status status = statusRepository.findByName(StatusEnum.WAITING)
-                 .orElseThrow(() -> new NotFoundException("Not Found status.", 1022));
+                .orElseThrow(() -> new NotFoundException("Not Found status.", 1022));
         tour.setName(tourEditRes.getName());
         tour.setAdultPrice(tourEditRes.getAdultPrice());
         tour.setChildPrice(tourEditRes.getChildPrice());
@@ -429,22 +429,23 @@ public class TourServiceImpl implements TourService {
         tour.setCategory(category);
         tour.setProvince(province);
         tour.setNumberPeople(tourEditRes.getNumberPeople());
-        try{
+        try {
             tourRepo.save(tour);
-        }catch (Exception e) {
+        } catch (Exception e) {
             throw new FailException("Can't update tour", 1023);
         }
 
-        int i =0;
-        for (TourImage tourImage : tour.getTourImages()){
+        int i = 0;
+        for (TourImage tourImage : tour.getTourImages()) {
             tourImage.setLink(tourEditRes.getTourImage().get(i));
             try {
                 tourImageRepo.save(tourImage);
-            }catch (Exception e) {
+            } catch (Exception e) {
                 throw new FailException("Can't update image tour", 1024);
             }
             i++;
-        };
+        }
+        ;
 
     }
 
@@ -453,8 +454,8 @@ public class TourServiceImpl implements TourService {
         List<Schedule> schedules = scheduleRepo.findAllByDate(searchHome.getDate());
         ResponseTourListDto responseTourListDto = new ResponseTourListDto();
         List<TourListDto> resTours1 = new ArrayList<>();
-        for (Schedule schedule : schedules){
-            if (schedule.getTour().getProvince().getId() == searchHome.getProvinceId()){
+        for (Schedule schedule : schedules) {
+            if (schedule.getTour().getProvince().getId() == searchHome.getProvinceId()) {
                 int totalStar = 0;
                 int totalReview = 0;
                 for (RateTour rateTour : schedule.getTour().getRateTours()) {
@@ -480,8 +481,8 @@ public class TourServiceImpl implements TourService {
     @Override
     public boolean isBookTour(CheckBookTour checkBookTour) {
         Optional<Payment> payment = paymentRepo.
-                findByTourIdAndCustomerIdAndScheduleId(checkBookTour.getTourId(),checkBookTour.getCustomerId(), checkBookTour.getScheduleId());
-        if (payment.isEmpty()){
+                findByTourIdAndCustomerIdAndScheduleId(checkBookTour.getTourId(), checkBookTour.getCustomerId(), checkBookTour.getScheduleId());
+        if (payment.isEmpty()) {
             return true;
         }
         return false;
@@ -508,5 +509,51 @@ public class TourServiceImpl implements TourService {
             tourListDtos.add(tourListDto);
         }
         return ResponseEntity.ok(ResponseDto.response(tourListDtos));
+    }
+
+    @Override
+    public ResponseEntity<Object> tourNeedCompleteInMonth( Integer providerId) {
+        LocalDate localDate = LocalDate.now();
+        List<Payment> payments = paymentRepo.findByProviderId(providerId);
+        List<TourNeedComplete> tourNeedCompletes = new ArrayList<>();
+        for (Payment payment : payments) {
+            if (payment.getSchedule().getDate().getYear() == localDate.getYear()
+                    && payment.getSchedule().getDate().getMonth()  == localDate.getMonth()) {
+                boolean check = false;
+                for (TourNeedComplete tourNeedComplete : tourNeedCompletes) {
+                    if (tourNeedComplete.getScheduleId() == payment.getSchedule().getId() &&
+                            tourNeedComplete.getTourId() == payment.getTour().getId()) {
+                        tourNeedComplete.setAdultNumber(tourNeedComplete.getAdultNumber()+payment.getAdultNumber());
+                        tourNeedComplete.setChildNumber(tourNeedComplete.getChildNumber()+payment.getChildrenNumber());
+                        CustomerInTourNeed customerInTourNeed = new CustomerInTourNeed();
+                        customerInTourNeed.setName(payment.getCustomer().getFullName());
+                        customerInTourNeed.setAdultNumber(payment.getAdultNumber());
+                        customerInTourNeed.setChildrenNumber(payment.getChildrenNumber());
+                        tourNeedComplete.getCustomerInTourNeeds().add(customerInTourNeed);
+                        check = true;
+                    }
+                }
+                if (!check) {
+                    TourNeedComplete tourNeedComplete = new TourNeedComplete();
+                    CustomerInTourNeed customerInTourNeed = new CustomerInTourNeed();
+                    List<CustomerInTourNeed> customerInTourNeeds = new ArrayList<>();
+                    tourNeedComplete.setId(payment.getId());
+                    tourNeedComplete.setTourId(payment.getTour().getId());
+                    tourNeedComplete.setScheduleId(payment.getSchedule().getId());
+                    tourNeedComplete.setName(payment.getTour().getName());
+                    tourNeedComplete.setAdultNumber(payment.getAdultNumber());
+                    tourNeedComplete.setChildNumber(payment.getChildrenNumber());
+                    tourNeedComplete.setSchedule(payment.getSchedule().getDate());
+                    tourNeedComplete.setImage(payment.getTour().getTourImages().iterator().next().getLink());
+                    customerInTourNeed.setName(payment.getCustomer().getFullName());
+                    customerInTourNeed.setAdultNumber(payment.getAdultNumber());
+                    customerInTourNeed.setChildrenNumber(payment.getChildrenNumber());
+                    customerInTourNeeds.add(customerInTourNeed);
+                    tourNeedComplete.setCustomerInTourNeeds(customerInTourNeeds);
+                    tourNeedCompletes.add(tourNeedComplete);
+                }
+            }
+        }
+        return ResponseEntity.ok(ResponseDto.response(tourNeedCompletes));
     }
 }

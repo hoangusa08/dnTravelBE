@@ -140,7 +140,7 @@ public class ProviderServiceImpl implements ProviderService {
         LocalDate start = LocalDate.of(year, 1, 1);
         LocalDate end = LocalDate.of(year, 12, 31);
         Integer percent = adminRepository.percent();
-        List<Payment> payments = paymentRepo.findAllByStatusAndDAndCreateAtAndProvider("COMPLETE", start, end, providerId);
+        List<Payment> payments = paymentRepo.findAllByStatusAndDAndCreateAtAndProvider( start, end, providerId);
         List<Double> acc = new ArrayList<>();
         for (int i = 0; i < 12; i++) {
             acc.add(0.0);
