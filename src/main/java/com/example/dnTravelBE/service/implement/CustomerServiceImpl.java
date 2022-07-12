@@ -30,7 +30,7 @@ public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepository customerRepository;
     private final AccountRepository accountRepository;
 
-    private static int sizePage = 5;
+    private static int sizePage = 10;
 
     public int totalPages(int count) {
         if (count <= sizePage) {

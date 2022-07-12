@@ -37,7 +37,7 @@ public class TourServiceImpl implements TourService {
 
     private final PaymentRepo paymentRepo;
 
-    private static int sizePage = 5;
+    private static int sizePage = 10;
 
     public int totalTourPages(int count) {
         if (count <= sizePage) {
@@ -73,6 +73,7 @@ public class TourServiceImpl implements TourService {
             tour.setNumberPeople(tourDetailReq.getNumberPeople());
             tour.setDelete(false);
             tour.setNumberDate(tourDetailReq.getNumberDate());
+            System.out.println("a");
             Tour newTour = tourRepo.save(tour);
             for (int i = 0; i < tourDetailReq.getTourImage().size(); i++) {
                 TourImage tourImage = new TourImage();
@@ -108,20 +109,22 @@ public class TourServiceImpl implements TourService {
         ResponseTourListDto responseTourListDto = new ResponseTourListDto();
         List<TourListDto> tourListDtos = new ArrayList<>();
         for (Tour tour : tours) {
-            int totalStar = 0;
-            int totalReview = 0;
-            for (RateTour rateTour : tour.getRateTours()) {
-                totalStar += rateTour.getStar();
-                ++totalReview;
-            }
-            TourListDto tourListDto = new TourListDto();
-            if (totalReview != 0) {
-                tourListDto = TourMapper.mapToTourListDto(tour, Double.valueOf(totalStar / totalReview));
-            } else {
-                tourListDto = TourMapper.mapToTourListDto(tour, Double.valueOf(0));
-            }
+            if (tour.getProvider().getStatus().getName() != StatusEnum.REFUSE) {
+                int totalStar = 0;
+                int totalReview = 0;
+                for (RateTour rateTour : tour.getRateTours()) {
+                    totalStar += rateTour.getStar();
+                    ++totalReview;
+                }
+                TourListDto tourListDto = new TourListDto();
+                if (totalReview != 0) {
+                    tourListDto = TourMapper.mapToTourListDto(tour, Double.valueOf(totalStar / totalReview));
+                } else {
+                    tourListDto = TourMapper.mapToTourListDto(tour, Double.valueOf(0));
+                }
 
-            tourListDtos.add(tourListDto);
+                tourListDtos.add(tourListDto);
+            }
         }
         responseTourListDto.setTours(tourListDtos);
         responseTourListDto.setTotal(total);
@@ -295,8 +298,8 @@ public class TourServiceImpl implements TourService {
 
     @Override
     public ResponseEntity getToursDashboard() {
-        Optional<Province> province1 = provinceRepo.findById(1);
-        Optional<Province> province2 = provinceRepo.findById(2);
+        Optional<Province> province1 = provinceRepo.findById(14);
+        Optional<Province> province2 = provinceRepo.findById(21);
 
         Optional<Status> status = statusRepository.findByName(StatusEnum.ACCEPT);
         boolean test = false;
@@ -308,37 +311,41 @@ public class TourServiceImpl implements TourService {
         List<TourListDto> resTours2 = new ArrayList<>();
 
         for (Tour tour : tour1) {
-            int totalStar = 0;
-            int totalReview = 0;
-            for (RateTour rateTour : tour.getRateTours()) {
-                totalStar += rateTour.getStar();
-                ++totalReview;
-            }
-            TourListDto tourListDto = new TourListDto();
-            if (totalReview != 0) {
-                tourListDto = TourMapper.mapToTourListDto(tour, Double.valueOf(totalStar / totalReview));
-            } else {
-                tourListDto = TourMapper.mapToTourListDto(tour, Double.valueOf(0));
-            }
+            if (tour.getProvider().getStatus().getName() != StatusEnum.REFUSE) {
+                int totalStar = 0;
+                int totalReview = 0;
+                for (RateTour rateTour : tour.getRateTours()) {
+                    totalStar += rateTour.getStar();
+                    ++totalReview;
+                }
+                TourListDto tourListDto = new TourListDto();
+                if (totalReview != 0) {
+                    tourListDto = TourMapper.mapToTourListDto(tour, Double.valueOf(totalStar / totalReview));
+                } else {
+                    tourListDto = TourMapper.mapToTourListDto(tour, Double.valueOf(0));
+                }
 
-            resTours1.add(tourListDto);
+                resTours1.add(tourListDto);
+            }
         }
 
         for (Tour tour : tour2) {
-            int totalStar = 0;
-            int totalReview = 0;
-            for (RateTour rateTour : tour.getRateTours()) {
-                totalStar += rateTour.getStar();
-                ++totalReview;
-            }
-            TourListDto tourListDto = new TourListDto();
-            if (totalReview != 0) {
-                tourListDto = TourMapper.mapToTourListDto(tour, Double.valueOf(totalStar / totalReview));
-            } else {
-                tourListDto = TourMapper.mapToTourListDto(tour, Double.valueOf(0));
-            }
+            if (tour.getProvider().getStatus().getName() != StatusEnum.REFUSE) {
+                int totalStar = 0;
+                int totalReview = 0;
+                for (RateTour rateTour : tour.getRateTours()) {
+                    totalStar += rateTour.getStar();
+                    ++totalReview;
+                }
+                TourListDto tourListDto = new TourListDto();
+                if (totalReview != 0) {
+                    tourListDto = TourMapper.mapToTourListDto(tour, Double.valueOf(totalStar / totalReview));
+                } else {
+                    tourListDto = TourMapper.mapToTourListDto(tour, Double.valueOf(0));
+                }
 
-            resTours2.add(tourListDto);
+                resTours2.add(tourListDto);
+            }
         }
 
         Map<String, Object> res = new HashMap<>();
@@ -494,37 +501,39 @@ public class TourServiceImpl implements TourService {
         List<TourListDto> tourListDtos = new ArrayList<>();
         for (Integer id : paymentIds) {
             Optional<Tour> tour = tourRepo.findById(id);
-            int totalStar = 0;
-            int totalReview = 0;
-            for (RateTour rateTour : tour.get().getRateTours()) {
-                totalStar += rateTour.getStar();
-                ++totalReview;
+            if (tour.get().getProvider().getStatus().getName() != StatusEnum.REFUSE) {
+                int totalStar = 0;
+                int totalReview = 0;
+                for (RateTour rateTour : tour.get().getRateTours()) {
+                    totalStar += rateTour.getStar();
+                    ++totalReview;
+                }
+                TourListDto tourListDto = new TourListDto();
+                if (totalReview != 0) {
+                    tourListDto = TourMapper.mapToTourListDto(tour.get(), Double.valueOf(totalStar / totalReview));
+                } else {
+                    tourListDto = TourMapper.mapToTourListDto(tour.get(), Double.valueOf(0));
+                }
+                tourListDtos.add(tourListDto);
             }
-            TourListDto tourListDto = new TourListDto();
-            if (totalReview != 0) {
-                tourListDto = TourMapper.mapToTourListDto(tour.get(), Double.valueOf(totalStar / totalReview));
-            } else {
-                tourListDto = TourMapper.mapToTourListDto(tour.get(), Double.valueOf(0));
-            }
-            tourListDtos.add(tourListDto);
         }
         return ResponseEntity.ok(ResponseDto.response(tourListDtos));
     }
 
     @Override
-    public ResponseEntity<Object> tourNeedCompleteInMonth( Integer providerId) {
+    public ResponseEntity<Object> tourNeedCompleteInMonth(Integer providerId) {
         LocalDate localDate = LocalDate.now();
         List<Payment> payments = paymentRepo.findByProviderId(providerId);
         List<TourNeedComplete> tourNeedCompletes = new ArrayList<>();
         for (Payment payment : payments) {
             if (payment.getSchedule().getDate().getYear() == localDate.getYear()
-                    && payment.getSchedule().getDate().getMonth()  == localDate.getMonth()) {
+                    && payment.getSchedule().getDate().getMonth() == localDate.getMonth()) {
                 boolean check = false;
                 for (TourNeedComplete tourNeedComplete : tourNeedCompletes) {
                     if (tourNeedComplete.getScheduleId() == payment.getSchedule().getId() &&
                             tourNeedComplete.getTourId() == payment.getTour().getId()) {
-                        tourNeedComplete.setAdultNumber(tourNeedComplete.getAdultNumber()+payment.getAdultNumber());
-                        tourNeedComplete.setChildNumber(tourNeedComplete.getChildNumber()+payment.getChildrenNumber());
+                        tourNeedComplete.setAdultNumber(tourNeedComplete.getAdultNumber() + payment.getAdultNumber());
+                        tourNeedComplete.setChildNumber(tourNeedComplete.getChildNumber() + payment.getChildrenNumber());
                         CustomerInTourNeed customerInTourNeed = new CustomerInTourNeed();
                         customerInTourNeed.setName(payment.getCustomer().getFullName());
                         customerInTourNeed.setAdultNumber(payment.getAdultNumber());

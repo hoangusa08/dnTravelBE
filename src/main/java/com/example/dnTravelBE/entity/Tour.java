@@ -44,6 +44,7 @@ public class Tour {
     private Integer numberPeople;
 
     @NotNull
+    @Column(length = 1000000)
     private String subDescription;
 
     @OneToMany(mappedBy = "tour", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)

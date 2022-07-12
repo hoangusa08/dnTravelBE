@@ -47,11 +47,11 @@ public class SecutityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/authen/**", "/tour", "bank", "/category", "/province").permitAll();// Cho phép tất cả mọi người truy cập vào 2 địa chỉ này
-//                .anyRequest().authenticated() // Tất cả các request khác đều cần phải xác thực mới được truy cập
-//                .and()
-//                .exceptionHandling().and().sessionManagement()
-//                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .antMatchers("/**").permitAll()// Cho phép tất cả mọi người truy cập vào 2 địa chỉ này
+                .anyRequest().authenticated() // Tất cả các request khác đều cần phải xác thực mới được truy cập
+                .and()
+                .exceptionHandling().and().sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 //        http.authorizeRequests().antMatchers("/admin/**").hasAuthority("ROLE_ADMIN");
 //        http.authorizeRequests().antMatchers("/provider/**").hasAuthority("ROLE_PROVIDER");
         http.authorizeRequests().and()

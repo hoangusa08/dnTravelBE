@@ -33,7 +33,7 @@ public class ProviderServiceImpl implements ProviderService {
     private final TourRepo tourRepo;
     private final AdminRepository adminRepository;
 
-    private static int sizePage = 5;
+    private static int sizePage = 10;
 
     public int totalTourPages(int count) {
         if (count <= sizePage) {
@@ -74,10 +74,10 @@ public class ProviderServiceImpl implements ProviderService {
         Provider provider = providerRepository.findByAccount_Id(account.getId()).
                 orElseThrow(() -> new NotFoundException("Not Found provider.", 1005));
         if (provider.getStatus().getName() == StatusEnum.WAITING ){
-            throw new FailException("Your account has not been verified", 2004);
+            throw new FailException("Tài khoản của bạn chưa được chấp nhận", 2004);
         }
         if (provider.getStatus().getName() == StatusEnum.REFUSE ){
-            throw new FailException("YYour account has been locked", 2004);
+            throw new FailException("Tài khoản của bạn đã bị khóa", 2004);
         }
         ProviderResLoginDto providerResLoginDto = ProviderMapper.mapToProviderResLoginDTo(provider);
         return providerResLoginDto;

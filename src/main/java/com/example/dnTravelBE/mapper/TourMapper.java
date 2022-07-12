@@ -69,6 +69,7 @@ public class TourMapper {
         tourDetailDto.setLocationStart(startLocation);
         tourDetailDto.setDateNumber(tour.getNumberDate());
         tourDetailDto.setNumberPeople(tour.getNumberPeople());
+        tourDetailDto.setCompany(tour.getProvider().getNameCompany());
         return tourDetailDto;
     }
 
@@ -155,6 +156,7 @@ public class TourMapper {
         tourDetailDto.setLocationStart(startLocation);
         tourDetailDto.setDateNumber(tour.getNumberDate());
         tourDetailDto.setNumberPeople(tour.getNumberPeople());
+        tourDetailDto.setCompany(tour.getProvider().getNameCompany());
         return tourDetailDto;
     }
 }

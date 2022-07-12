@@ -28,4 +28,5 @@ public class TourDetailDto {
     private String subDescription;
     private Integer dateNumber;
     private Integer numberPeople;
+    private String company;
 }

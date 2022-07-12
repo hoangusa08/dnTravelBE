@@ -48,7 +48,7 @@ public class LoginController {
                     new UsernamePasswordAuthenticationToken(loginRequestDto.getEmail(), loginRequestDto.getPassword())
             );
         } catch (Exception e) {
-            throw new Exception("Invalid Email or Password");
+            throw new Exception("Email hoặc mật khẩu sai");
         }
         AccountRole role = accountService.getRoleOfUser(loginRequestDto.getEmail());
         if (role != AccountRole.ROLE_CUSTOMER) {
@@ -57,7 +57,7 @@ public class LoginController {
 
         Map<String, Object> response = new HashMap<>();
         response.put("access_token", jwtUtil.generateToken(loginRequestDto.getEmail()));
-        response.put("message", "login successfully");
+        response.put("message", "Đăng nhập thành công");
         response.put("result", true);
         response.put("status", 200);
         response.put("user", customerService.getCustomerWhenLogin(loginRequestDto.getEmail()));
@@ -71,7 +71,7 @@ public class LoginController {
                     new UsernamePasswordAuthenticationToken(loginRequestDto.getEmail(), loginRequestDto.getPassword())
             );
         } catch (Exception e) {
-            throw new Exception("Invalid Email or Password");
+            throw new Exception("Email hoặc mật khẩu sai");
         }
         AccountRole role = accountService.getRoleOfUser(loginRequestDto.getEmail());
         if (role == AccountRole.ROLE_CUSTOMER) {
@@ -79,7 +79,7 @@ public class LoginController {
         }
         Map<String, Object> response = new HashMap<>();
         response.put("access_token", jwtUtil.generateToken(loginRequestDto.getEmail()));
-        response.put("message", "login successfully");
+        response.put("message", "Đăng nhập thành công");
         response.put("result", true);
         response.put("status", 200);
         if (role == AccountRole.ROLE_PROVIDER) {
